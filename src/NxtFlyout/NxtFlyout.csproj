@@ -37,4 +37,11 @@
     <Resource Include="Assets\Logo.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- Ship our licence and the third-party notices next to NxtFlyout.exe, so the installer and
+         the portable zip (both made from the publish folder) carry them. MIT requires the notices. -->
+    <None Include="..\..\LICENSE" Link="LICENSE.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <None Include="..\..\THIRD-PARTY-NOTICES.txt" Link="THIRD-PARTY-NOTICES.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>

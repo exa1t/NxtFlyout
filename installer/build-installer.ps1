@@ -83,8 +83,10 @@ dotnet publish $project `
     -o $publishDir
 if ($LASTEXITCODE -ne 0) { throw 'dotnet publish failed.' }
 
-if (-not (Test-Path (Join-Path $publishDir 'NxtFlyout.exe'))) {
-    throw 'dotnet publish did not produce NxtFlyout.exe.'
+foreach ($required in @('NxtFlyout.exe', 'LICENSE.txt', 'THIRD-PARTY-NOTICES.txt')) {
+    if (-not (Test-Path (Join-Path $publishDir $required))) {
+        throw "dotnet publish did not produce $required."
+    }
 }
 
 $candidates = @(

@@ -77,8 +77,8 @@ self-contained, so the target PC does not need .NET.
 Releases are built by GitHub Actions on a Windows machine:
 
 ```powershell
-git tag v1.1.0
-git push origin v1.1.0
+git tag v1.1.1
+git push origin v1.1.1
 ```
 
 The **Release** workflow (`.github/workflows/release.yml`) takes the version from the tag, runs
@@ -212,5 +212,12 @@ The language picker then offers it, and switching applies without a restart.
 ## Credits
 
 NxtFlyout's code, icon and branding are original. It builds on
-[WPF-UI](https://github.com/lepoco/wpfui) (MIT) and
-[CommunityToolkit.Mvvm](https://github.com/CommunityToolkit/dotnet) (MIT).
+[WPF-UI](https://github.com/lepoco/wpfui) (MIT),
+[CommunityToolkit.Mvvm](https://github.com/CommunityToolkit/dotnet) (MIT) and
+[NAudio](https://github.com/naudio/NAudio) (MIT). Their copyright and licence notices are in
+[THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt), which is also installed next to
+`NxtFlyout.exe`.
+
+## License
+
+NxtFlyout is released under the [MIT License](LICENSE).

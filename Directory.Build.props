@@ -5,10 +5,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Deterministic>true</Deterministic>
 
-    <Version>1.1.0</Version>
+    <Version>1.1.1</Version>
     <Product>NxtFlyout</Product>
     <Company>NxtFlyout</Company>
-    <Copyright>Copyright (c) NxtFlyout contributors</Copyright>
+    <Copyright>Copyright (c) 2026 exa1t</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
   </PropertyGroup>
