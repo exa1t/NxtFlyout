@@ -1,0 +1,93 @@
+# Builds the NxtFlyout installer on Windows and publishes it as a GitHub Release.
+#
+# To release:  git tag v1.1.0  &&  git push origin v1.1.0
+# The tag decides the version stamped on the app and installer.
+#
+# Running the workflow by hand (Actions tab -> Release -> Run workflow) builds everything
+# and attaches it to the run as an artifact, without creating a release.
+
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to stamp on the test build, e.g. 1.1.0'
+        required: true
+        default: '0.0.0'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Work out the version
+        id: version
+        shell: pwsh
+        run: |
+          if ('${{ github.event_name }}' -eq 'push') {
+            $version = '${{ github.ref_name }}'.TrimStart('v')
+          } else {
+            $version = '${{ inputs.version }}'
+          }
+          if ($version -notmatch '^\d+\.\d+\.\d+$') {
+            throw "Version '$version' must look like 1.2.3 (tags must look like v1.2.3)."
+          }
+          "version=$version" >> $env:GITHUB_OUTPUT
+
+      - name: Install Inno Setup
+        shell: pwsh
+        run: |
+          $installed = @(
+            (Join-Path ${env:ProgramFiles(x86)} 'Inno Setup 6\ISCC.exe'),
+            (Join-Path $env:ProgramFiles 'Inno Setup 6\ISCC.exe')
+          ) | Where-Object { Test-Path $_ }
+          if (-not $installed) {
+            choco install innosetup --yes --no-progress
+            if ($LASTEXITCODE -ne 0) { throw 'Installing Inno Setup failed.' }
+          }
+
+      - name: Build installer and portable zip
+        shell: pwsh
+        run: ./installer/build-installer.ps1 -Version '${{ steps.version.outputs.version }}'
+
+      - name: Keep the files with this run
+        uses: actions/upload-artifact@v4
+        with:
+          name: NxtFlyout-${{ steps.version.outputs.version }}
+          path: artifacts/installer/*
+          if-no-files-found: error
+
+      - name: Publish the GitHub Release
+        if: github.event_name == 'push'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $tag = '${{ github.ref_name }}'
+          $notes = (Get-Content installer/release-notes.md -Raw).Replace('<version>', '${{ steps.version.outputs.version }}')
+          Set-Content -Path release-notes.tmp.md -Value $notes -Encoding utf8
+          $files = Get-ChildItem artifacts/installer -File | ForEach-Object { $_.FullName }
+
+          gh release view $tag *> $null
+          if ($LASTEXITCODE -eq 0) {
+            # Re-running the workflow for a tag replaces that release's files.
+            gh release upload $tag @files --clobber
+          } else {
+            gh release create $tag @files --title "NxtFlyout $tag" --notes-file release-notes.tmp.md
+          }
+          if ($LASTEXITCODE -ne 0) { throw 'Publishing the release failed.' }

@@ -2,6 +2,23 @@
 
 A lightweight Windows 11 tray utility that shows Fluent-style flyouts for media and keyboard events.
 
+## Download and install
+
+1. Go to [**Releases**](https://github.com/exa1t/NxtFlyout/releases/latest) and download
+   `NxtFlyout-Setup-<version>.exe`.
+2. Run it. It needs no administrator rights and no .NET install: everything it needs is inside.
+   Windows may say *"Windows protected your PC"* because the installer is not code-signed;
+   click **More info → Run anyway**.
+3. Keep *"Start NxtFlyout automatically when I sign in"* ticked and finish. NxtFlyout starts and
+   opens its settings; afterwards it lives in the notification area (possibly behind the `^`
+   arrow).
+
+To upgrade, run a newer installer: it closes the running copy and keeps your settings. To remove
+it, use **Settings → Apps → Installed apps → NxtFlyout → Uninstall**.
+
+No installer wanted? Download `NxtFlyout-<version>-portable-x64.zip`, unzip it anywhere and run
+`NxtFlyout.exe`.
+
 ## Features
 
 - **Media flyout** – press a media key (play/pause, next, previous, stop) to see the current
@@ -51,8 +68,27 @@ After `dotnet run`, look for the NxtFlyout icon in the notification area (it may
 ## Build the installer
 
 The installer is a per-user [Inno Setup](https://jrsoftware.org/isinfo.php) package: no
-administrator rights, installs to `%LocalAppData%\Programs\NxtFlyout`, adds a Start menu entry
-and an uninstaller.
+administrator rights, installs to `%LocalAppData%\Programs\NxtFlyout`, adds a Start menu entry,
+optionally starts the app at sign-in, and registers an uninstaller. The app inside is
+self-contained, so the target PC does not need .NET.
+
+### On GitHub (recommended)
+
+Releases are built by GitHub Actions on a Windows machine:
+
+```powershell
+git tag v1.1.0
+git push origin v1.1.0
+```
+
+The **Release** workflow (`.github/workflows/release.yml`) takes the version from the tag, runs
+the tests, builds the installer and portable zip, and publishes them with checksums as a GitHub
+Release. Use **Actions → Release → Run workflow** to build a test copy without releasing it;
+the files are attached to the workflow run.
+
+The **CI** workflow builds and tests every push to `main`.
+
+### On your PC
 
 1. Install Inno Setup 6.3 or later, once:
    ```powershell
@@ -62,14 +98,14 @@ and an uninstaller.
    ```powershell
    powershell -ExecutionPolicy Bypass -File .\installer\build-installer.ps1
    ```
-3. The result is `artifacts\installer\NxtFlyout-Setup-<version>.exe`.
+3. The installer, portable zip and `SHA256SUMS.txt` are in `artifacts\installer`.
 
-The script runs the tests, publishes a self-contained x64 build (the target PC does not need
-.NET installed) and compiles `installer\NxtFlyout.iss`. Add `-FrameworkDependent` for a much
-smaller installer that requires the .NET 8 Desktop Runtime, or `-SkipTests` to skip the tests.
+Options: `-Version 1.2.3` to override the version in `Directory.Build.props`,
+`-FrameworkDependent` for a much smaller build that requires the .NET 8 Desktop Runtime,
+`-SkipTests` to skip the tests.
 
-The installer is not code-signed, so Windows SmartScreen will warn about an unknown publisher
-when it is run on another PC. Uninstalling leaves your settings in `%AppData%\NxtFlyout`.
+The installer is not code-signed, so SmartScreen warns about an unknown publisher until a
+download has built up reputation. Uninstalling leaves your settings in `%AppData%\NxtFlyout`.
 
 ## Settings
 
@@ -111,7 +147,8 @@ src/
     Assets/              app icon and logo
 tests/
   NxtFlyout.Tests/       xUnit tests for everything in Core
-installer/               Inno Setup script and build script
+installer/               Inno Setup script, build script, release notes template
+.github/workflows/       CI (build + test) and Release (installer → GitHub Release)
 tools/icon/              SVG sources and the script that builds the .ico
 ```
 
