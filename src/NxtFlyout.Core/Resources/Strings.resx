@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  English (neutral) UI strings.
+  To add a language, copy this file to Strings.<culture>.resx (for example Strings.vi.resx),
+  translate the values, and add the culture name to Localizer.SupportedLanguages.
+-->
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- Tray -->
+  <data name="Tray_Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Tray_Quit" xml:space="preserve">
+    <value>Quit NxtFlyout</value>
+  </data>
+
+  <!-- Settings window -->
+  <data name="Settings_WindowTitle" xml:space="preserve">
+    <value>NxtFlyout Settings</value>
+  </data>
+  <data name="Nav_General" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="Nav_Flyouts" xml:space="preserve">
+    <value>Flyouts</value>
+  </data>
+  <data name="Nav_Appearance" xml:space="preserve">
+    <value>Appearance</value>
+  </data>
+  <data name="Nav_About" xml:space="preserve">
+    <value>About</value>
+  </data>
+
+  <!-- General page -->
+  <data name="General_Error_Title" xml:space="preserve">
+    <value>Couldn't change the startup setting</value>
+  </data>
+  <data name="General_StartWithWindows_Title" xml:space="preserve">
+    <value>Start with Windows</value>
+  </data>
+  <data name="General_StartWithWindows_Description" xml:space="preserve">
+    <value>Launch NxtFlyout quietly in the tray when you sign in.</value>
+  </data>
+  <data name="General_Language_Title" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="General_Language_Description" xml:space="preserve">
+    <value>The language NxtFlyout is displayed in.</value>
+  </data>
+  <data name="General_DisableInFullscreen_Title" xml:space="preserve">
+    <value>Pause in fullscreen games</value>
+  </data>
+  <data name="General_DisableInFullscreen_Description" xml:space="preserve">
+    <value>Don't show flyouts while a fullscreen game or app is in the foreground.</value>
+  </data>
+  <data name="Language_System" xml:space="preserve">
+    <value>Use system language</value>
+  </data>
+
+  <!-- Flyouts page -->
+  <data name="Flyouts_Section_Flyouts" xml:space="preserve">
+    <value>Flyouts</value>
+  </data>
+  <data name="Flyouts_Section_Behavior" xml:space="preserve">
+    <value>Behavior</value>
+  </data>
+  <data name="Flyouts_Media_Title" xml:space="preserve">
+    <value>Media flyout</value>
+  </data>
+  <data name="Flyouts_Media_Description" xml:space="preserve">
+    <value>Show what's playing, with controls, when you press a media key.</value>
+  </data>
+  <data name="Flyouts_Volume_Title" xml:space="preserve">
+    <value>Volume flyout</value>
+  </data>
+  <data name="Flyouts_Volume_Description" xml:space="preserve">
+    <value>Show a Fluent volume indicator when you press the volume or mute keys.</value>
+  </data>
+  <data name="Flyouts_UpNext_Title" xml:space="preserve">
+    <value>Up Next</value>
+  </data>
+  <data name="Flyouts_UpNext_Description" xml:space="preserve">
+    <value>Briefly announce the new track when the song changes on its own.</value>
+  </data>
+  <data name="Flyouts_LockKeys_Title" xml:space="preserve">
+    <value>Lock keys flyout</value>
+  </data>
+  <data name="Flyouts_LockKeys_Description" xml:space="preserve">
+    <value>Show the Caps Lock, Num Lock and Scroll Lock state when you toggle them.</value>
+  </data>
+  <data name="Flyouts_TaskbarWidget_Title" xml:space="preserve">
+    <value>Taskbar widget</value>
+  </data>
+  <data name="Flyouts_TaskbarWidget_Description" xml:space="preserve">
+    <value>Dock a compact now-playing widget to the taskbar. Click it to open the media flyout.</value>
+  </data>
+  <data name="Flyouts_Timeout_Title" xml:space="preserve">
+    <value>Hide after</value>
+  </data>
+  <data name="Flyouts_Timeout_Description" xml:space="preserve">
+    <value>How long a flyout stays on screen before it hides.</value>
+  </data>
+
+  <!-- Media flyout -->
+  <data name="Media_Previous" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="Media_PlayPause" xml:space="preserve">
+    <value>Play or pause</value>
+  </data>
+  <data name="Media_Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+
+  <!-- Appearance page -->
+  <data name="Appearance_Section_Look" xml:space="preserve">
+    <value>Look</value>
+  </data>
+  <data name="Appearance_Section_Layout" xml:space="preserve">
+    <value>Layout and motion</value>
+  </data>
+  <data name="Appearance_Theme_Title" xml:space="preserve">
+    <value>App theme</value>
+  </data>
+  <data name="Appearance_Theme_Description" xml:space="preserve">
+    <value>Follow Windows, or always use light or dark.</value>
+  </data>
+  <data name="Appearance_Backdrop_Title" xml:space="preserve">
+    <value>Backdrop material</value>
+  </data>
+  <data name="Appearance_Backdrop_Description" xml:space="preserve">
+    <value>The material drawn behind flyouts and this window. Mica and Acrylic need Windows 11 22H2 or later.</value>
+  </data>
+  <data name="Appearance_Position_Title" xml:space="preserve">
+    <value>Media flyout position</value>
+  </data>
+  <data name="Appearance_Position_Description" xml:space="preserve">
+    <value>Where the media flyout appears. The other flyouts have their own setting on the Flyouts page.</value>
+  </data>
+  <data name="Appearance_Compact_Title" xml:space="preserve">
+    <value>Compact layout</value>
+  </data>
+  <data name="Appearance_Compact_Description" xml:space="preserve">
+    <value>Use a smaller flyout with less padding.</value>
+  </data>
+  <data name="Appearance_AnimationSpeed_Title" xml:space="preserve">
+    <value>Animation speed</value>
+  </data>
+  <data name="Appearance_AnimationSpeed_Description" xml:space="preserve">
+    <value>How quickly flyouts slide and fade.</value>
+  </data>
+
+  <!-- Flyouts page (additions) -->
+  <data name="Flyouts_Position_Tooltip" xml:space="preserve">
+    <value>Where this flyout appears</value>
+  </data>
+  <data name="Flyouts_ReplaceNative_Title" xml:space="preserve">
+    <value>Replace the Windows volume overlay</value>
+  </data>
+  <data name="Flyouts_ReplaceNative_Description" xml:space="preserve">
+    <value>Let NxtFlyout handle the volume keys so the built-in overlay doesn't appear as well.</value>
+  </data>
+  <data name="Flyouts_WidgetOffset_Title" xml:space="preserve">
+    <value>Taskbar widget offset</value>
+  </data>
+  <data name="Flyouts_WidgetOffset_Description" xml:space="preserve">
+    <value>Distance from the left end of the taskbar. Increase it if the widget covers the Widgets button.</value>
+  </data>
+
+  <!-- Appearance page (additions) -->
+  <data name="Appearance_Display_Title" xml:space="preserve">
+    <value>Show flyouts on</value>
+  </data>
+  <data name="Appearance_Display_Description" xml:space="preserve">
+    <value>Which display flyouts appear on when you have more than one.</value>
+  </data>
+
+  <!-- Other flyouts and the taskbar widget -->
+  <data name="UpNext_Caption" xml:space="preserve">
+    <value>Up next</value>
+  </data>
+  <data name="Widget_Open" xml:space="preserve">
+    <value>Show the media flyout</value>
+  </data>
+  <data name="LockKeys_CapsLock_On" xml:space="preserve">
+    <value>Caps Lock is on</value>
+  </data>
+  <data name="LockKeys_CapsLock_Off" xml:space="preserve">
+    <value>Caps Lock is off</value>
+  </data>
+  <data name="LockKeys_NumLock_On" xml:space="preserve">
+    <value>Num Lock is on</value>
+  </data>
+  <data name="LockKeys_NumLock_Off" xml:space="preserve">
+    <value>Num Lock is off</value>
+  </data>
+  <data name="LockKeys_ScrollLock_On" xml:space="preserve">
+    <value>Scroll Lock is on</value>
+  </data>
+  <data name="LockKeys_ScrollLock_Off" xml:space="preserve">
+    <value>Scroll Lock is off</value>
+  </data>
+
+  <!-- About page -->
+  <data name="About_Description" xml:space="preserve">
+    <value>A lightweight tray utility that shows Fluent-style flyouts for media and keyboard events.</value>
+  </data>
+  <data name="About_Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="About_SettingsFile_Title" xml:space="preserve">
+    <value>Settings file</value>
+  </data>
+  <data name="About_OpenFolder" xml:space="preserve">
+    <value>Open folder</value>
+  </data>
+  <data name="About_Reset_Title" xml:space="preserve">
+    <value>Reset settings</value>
+  </data>
+  <data name="About_Reset_Description" xml:space="preserve">
+    <value>Restore every option to its default value.</value>
+  </data>
+  <data name="About_Reset_Button" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+
+  <!-- Errors -->
+  <data name="Error_StartupFailed" xml:space="preserve">
+    <value>NxtFlyout couldn't start. Details were written to the log file.</value>
+  </data>
+
+  <!-- Enum labels: Enum_<Type>_<Value> -->
+  <data name="Enum_AppTheme_System" xml:space="preserve">
+    <value>Use system setting</value>
+  </data>
+  <data name="Enum_AppTheme_Light" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="Enum_AppTheme_Dark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="Enum_BackdropKind_Mica" xml:space="preserve">
+    <value>Mica</value>
+  </data>
+  <data name="Enum_BackdropKind_Acrylic" xml:space="preserve">
+    <value>Acrylic</value>
+  </data>
+  <data name="Enum_BackdropKind_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="Enum_FlyoutVerticalPosition_Top" xml:space="preserve">
+    <value>Top</value>
+  </data>
+  <data name="Enum_FlyoutVerticalPosition_Bottom" xml:space="preserve">
+    <value>Bottom</value>
+  </data>
+  <data name="Enum_FlyoutHorizontalPosition_Left" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="Enum_FlyoutHorizontalPosition_Center" xml:space="preserve">
+    <value>Center</value>
+  </data>
+  <data name="Enum_FlyoutHorizontalPosition_Right" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="Enum_AnimationSpeed_Off" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="Enum_AnimationSpeed_Fast" xml:space="preserve">
+    <value>Fast</value>
+  </data>
+  <data name="Enum_AnimationSpeed_Normal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="Enum_AnimationSpeed_Slow" xml:space="preserve">
+    <value>Slow</value>
+  </data>
+  <data name="Enum_FlyoutPosition_TopLeft" xml:space="preserve">
+    <value>Top left</value>
+  </data>
+  <data name="Enum_FlyoutPosition_TopCenter" xml:space="preserve">
+    <value>Top center</value>
+  </data>
+  <data name="Enum_FlyoutPosition_TopRight" xml:space="preserve">
+    <value>Top right</value>
+  </data>
+  <data name="Enum_FlyoutPosition_BottomLeft" xml:space="preserve">
+    <value>Bottom left</value>
+  </data>
+  <data name="Enum_FlyoutPosition_BottomCenter" xml:space="preserve">
+    <value>Bottom center</value>
+  </data>
+  <data name="Enum_FlyoutPosition_BottomRight" xml:space="preserve">
+    <value>Bottom right</value>
+  </data>
+  <data name="Enum_FlyoutDisplay_Primary" xml:space="preserve">
+    <value>Primary display</value>
+  </data>
+  <data name="Enum_FlyoutDisplay_Cursor" xml:space="preserve">
+    <value>Display with the pointer</value>
+  </data>
+  <data name="Enum_FlyoutDisplay_ActiveWindow" xml:space="preserve">
+    <value>Display with the active window</value>
+  </data>
+  <data name="Flyouts_Visualizer_Title" xml:space="preserve">
+    <value>Taskbar visualizer</value>
+  </data>
+  <data name="Flyouts_Visualizer_Description" xml:space="preserve">
+    <value>Animated bars next to the taskbar widget that move with the music.</value>
+  </data>
+  <data name="Flyouts_VisualizerBars_Title" xml:space="preserve">
+    <value>Visualizer bars</value>
+  </data>
+  <data name="Flyouts_VisualizerBars_Description" xml:space="preserve">
+    <value>How many bars the visualizer draws.</value>
+  </data>
+  <data name="Flyouts_VisualizerColor_Title" xml:space="preserve">
+    <value>Visualizer color</value>
+  </data>
+  <data name="Flyouts_VisualizerColor_Description" xml:space="preserve">
+    <value>Match the taskbar text, use your Windows accent color, or type your own as #RRGGBB.</value>
+  </data>
+  <data name="Enum_VisualizerColorMode_Auto" xml:space="preserve">
+    <value>Match taskbar</value>
+  </data>
+  <data name="Enum_VisualizerColorMode_Accent" xml:space="preserve">
+    <value>Accent color</value>
+  </data>
+  <data name="Enum_VisualizerColorMode_Custom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="Media_SourceAppIcon" xml:space="preserve">
+    <value>Player icon</value>
+  </data>
+  <data name="Flyouts_VisualizerDirection_Title" xml:space="preserve">
+    <value>Visualizer direction</value>
+  </data>
+  <data name="Flyouts_VisualizerDirection_Description" xml:space="preserve">
+    <value>Grow the bars from the middle, from the bottom up, or from the top down.</value>
+  </data>
+  <data name="Enum_VisualizerAlignment_Center" xml:space="preserve">
+    <value>From the middle</value>
+  </data>
+  <data name="Enum_VisualizerAlignment_Bottom" xml:space="preserve">
+    <value>Bottom up</value>
+  </data>
+  <data name="Enum_VisualizerAlignment_Top" xml:space="preserve">
+    <value>Top down</value>
+  </data>
+  <data name="Enum_BackdropKind_Translucent" xml:space="preserve">
+    <value>Translucent (works in energy saver)</value>
+  </data>
+  <data name="Appearance_TranslucentOpacity_Title" xml:space="preserve">
+    <value>Translucent opacity</value>
+  </data>
+  <data name="Appearance_TranslucentOpacity_Description" xml:space="preserve">
+    <value>How solid the flyout background is with the Translucent backdrop. Lower shows more of what is behind it.</value>
+  </data>
+</root>

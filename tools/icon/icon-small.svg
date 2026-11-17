@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- NxtFlyout app icon (tray and other small sizes): the same idea with the fine detail removed. -->
+  <defs>
+    <linearGradient id="tile" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6D5BF6"/>
+      <stop offset="1" stop-color="#12B5C9"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="1" y="1" width="30" height="30" rx="7" fill="url(#tile)"/>
+
+  <!-- flyout card -->
+  <rect x="5" y="7" width="22" height="12" rx="3" fill="#FFFFFF"/>
+  <!-- play mark -->
+  <path d="M13.5 9.6 L19.5 13 L13.5 16.4 Z" fill="#5A4BE0"/>
+
+  <!-- taskbar -->
+  <rect x="5" y="22" width="22" height="4" rx="2" fill="#FFFFFF" opacity="0.65"/>
+</svg>

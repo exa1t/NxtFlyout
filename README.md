@@ -1,0 +1,179 @@
+# NxtFlyout
+
+A lightweight Windows 11 tray utility that shows Fluent-style flyouts for media and keyboard events.
+
+## Features
+
+- **Media flyout** – press a media key (play/pause, next, previous, stop) to see the current
+  track: album art, title, artist, player name, a live progress bar and previous / play-pause /
+  next buttons.
+- **Volume flyout** (optional) – a Fluent volume indicator for the volume and mute keys. By
+  default NxtFlyout handles those keys itself, so the built-in Windows overlay does not appear
+  as well.
+- **Lock keys flyout** – shows the new state when you toggle Caps Lock, Num Lock or Scroll Lock.
+- **Up Next flyout** (optional) – briefly announces the new track when the song changes on its own.
+- **Taskbar widget** (optional) – a compact now-playing widget on the taskbar with cover, title,
+  artist and previous / play-pause / next. Click it to open the media flyout.
+- **Taskbar visualizer** – animated bars next to the taskbar widget that follow the audio
+  (WASAPI loopback). 10–20 bars that grow from the middle, bottom up or top down; colour can match
+  the taskbar, use the accent colour or a custom hex value.
+- **Per-flyout position** – each flyout has its own on/off switch and screen position.
+- **Mica / Acrylic** – flyouts and the settings window use the Windows 11 materials (or a solid
+  themed card when you choose "None" or run an older Windows).
+- **Multi-monitor and DPI aware** – flyouts appear on the primary display, the display with the
+  pointer or the display with the active window, sized correctly for each display's scale.
+- **Never in the way** – flyouts never take keyboard focus, stay out of Alt+Tab, stay open while
+  the pointer is over them and can pause while a fullscreen game is running.
+- **Tray app** – single instance, Fluent tray menu, optional start with Windows, System / Light /
+  Dark theme that follows Windows and its accent colour live.
+- **Localizable** – every string comes from a resx file; English ships first.
+
+## Requirements
+
+- Windows 10 version 2004 (build 19041) or later. **Windows 11 22H2 or later** for Mica/Acrylic
+  flyouts and rounded corners.
+- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) or newer to build.
+
+## Build and run
+
+```powershell
+dotnet build
+dotnet test
+dotnet run --project src/NxtFlyout
+```
+
+The first build restores [WPF-UI](https://github.com/lepoco/wpfui),
+[CommunityToolkit.Mvvm](https://github.com/CommunityToolkit/dotnet) and xUnit (tests only).
+
+After `dotnet run`, look for the NxtFlyout icon in the notification area (it may be behind the
+`^` arrow). Left-click it for settings, right-click for the menu.
+
+## Build the installer
+
+The installer is a per-user [Inno Setup](https://jrsoftware.org/isinfo.php) package: no
+administrator rights, installs to `%LocalAppData%\Programs\NxtFlyout`, adds a Start menu entry
+and an uninstaller.
+
+1. Install Inno Setup 6.3 or later, once:
+   ```powershell
+   winget install JRSoftware.InnoSetup
+   ```
+2. Quit NxtFlyout if it is running, then from the solution folder:
+   ```powershell
+   powershell -ExecutionPolicy Bypass -File .\installer\build-installer.ps1
+   ```
+3. The result is `artifacts\installer\NxtFlyout-Setup-<version>.exe`.
+
+The script runs the tests, publishes a self-contained x64 build (the target PC does not need
+.NET installed) and compiles `installer\NxtFlyout.iss`. Add `-FrameworkDependent` for a much
+smaller installer that requires the .NET 8 Desktop Runtime, or `-SkipTests` to skip the tests.
+
+The installer is not code-signed, so Windows SmartScreen will warn about an unknown publisher
+when it is run on another PC. Uninstalling leaves your settings in `%AppData%\NxtFlyout`.
+
+## Settings
+
+Settings are stored as JSON in `%AppData%\NxtFlyout\settings.json` and are written whenever you
+change something (About → *Open folder* takes you there). The file tolerates hand edits; a file
+that cannot be parsed is copied to `settings.corrupt.json` and defaults are used.
+
+| Page | Options |
+| --- | --- |
+| General | Start with Windows, language, pause in fullscreen games |
+| Flyouts | On/off for each flyout and the taskbar widget; position of the volume, lock keys and Up Next flyouts; replace the Windows volume overlay; taskbar widget offset; visualizer on/off, bar count, direction and colour; hide-after delay |
+| Appearance | Theme, backdrop material, which display to use, media flyout position, compact layout, animation speed |
+| About | Version, settings folder, reset to defaults |
+
+Errors are logged to `%AppData%\NxtFlyout\logs\nxtflyout.log`.
+
+## Project layout
+
+```
+NxtFlyout.sln
+src/
+  NxtFlyout.Core/        net8.0 – no WPF or Windows APIs, fully unit-testable
+    Settings/            AppSettings, SettingsService (JSON), tolerant enum converter
+    Media/               MediaSnapshot, IMediaService, media key map, text formatting
+    Audio/               IVolumeService
+    Input/               volume and lock key maps
+    Flyouts/             FlyoutPlacement, FlyoutCoordinator
+    Localization/        Localizer (resx lookup with live language switching)
+    ViewModels/          FlyoutViewModelBase and one view model per flyout, the widget and settings
+    Resources/           Strings.resx
+  NxtFlyout/             net8.0-windows – WPF app
+    App.xaml(.cs)        start-up, single instance, shutdown, crash logging
+    AppHost.cs           composition root: creates and wires the services
+    Services/            SMTC media, Core Audio volume, keyboard hook, tray, theme, start-up,
+                         flyout presenter, taskbar widget
+    Interop/             Win32 declarations, display/DPI lookup
+    Views/               FlyoutWindowBase, the flyout windows, taskbar widget, settings window
+    Localization/        {loc:Loc Key} markup extension
+    Assets/              app icon and logo
+tests/
+  NxtFlyout.Tests/       xUnit tests for everything in Core
+installer/               Inno Setup script and build script
+tools/icon/              SVG sources and the script that builds the .ico
+```
+
+## How it works
+
+- **Media** – `SmtcMediaService` follows the system's current media session through
+  `Windows.Media.Control` (SMTC) and publishes an immutable `MediaSnapshot` on every change.
+- **Keys** – `KeyboardHookService` installs one low-level keyboard hook (`WH_KEYBOARD_LL`), only
+  while a flyout that needs it is enabled. Media and lock keys are observed and passed on.
+  Volume keys are swallowed when "Replace the Windows volume overlay" is on, and the app changes
+  the volume itself through the Core Audio API; if that ever fails, the keys are handed back to
+  Windows.
+- **View models** – all flyout logic (when to show, auto-hide, hover, fullscreen rule, one
+  flyout at a time) lives in `NxtFlyout.Core` and is unit-tested without any UI.
+- **Windows** – `FlyoutWindowBase` builds each flyout as a topmost `WS_EX_NOACTIVATE` tool
+  window, places it in physical pixels on the chosen display, and either asks Windows for a
+  Mica/Acrylic backdrop or draws a solid rounded card.
+- **Taskbar widget** – a small window owned by the taskbar window, repositioned on a slow timer.
+
+## Adding a language
+
+1. Copy `src/NxtFlyout.Core/Resources/Strings.resx` to `Strings.<culture>.resx` (for example
+   `Strings.vi.resx`) and translate the values.
+2. Add the culture name to `Localizer.SupportedLanguages`.
+
+The language picker then offers it, and switching applies without a restart.
+
+## Known limitations
+
+- **Players without SMTC data.** Media info comes from the System Media Transport Controls.
+  Players that do not publish to SMTC cannot be shown or controlled, and some publish only part
+  of it (no album art, no timeline, or a position updated only on play/pause/seek, in which case
+  the progress bar is an estimate).
+- **"Up Next" shows at the track change, not before it.** Windows does not expose a player's
+  queue, so the next track is not known until it starts.
+- **No seeking, shuffle/repeat, session switcher or per-app volume mixer yet.** The flyout
+  follows whichever session Windows treats as current, and the progress bar is display-only.
+- **Volume keys that bypass the keyboard.** Replacing the Windows volume overlay works by
+  handling the volume keys. Volume changed any other way (a hardware knob that does not send key
+  presses, the taskbar slider, another app) still uses the Windows overlay.
+- **Elevated windows.** A low-level keyboard hook is not delivered while an administrator window
+  has focus unless NxtFlyout is elevated too, so flyouts do not appear then, and with the overlay
+  replacement on, the Windows overlay appears instead.
+- **Taskbar widget.** Windows has no API for adding content to the taskbar. The widget is a
+  separate window placed over the left end of a horizontal primary taskbar; it does not know
+  about the taskbar's own buttons, so use the offset setting if it covers the Widgets button or
+  left-aligned icons. It is hidden for vertical or auto-hidden taskbars and fullscreen apps.
+- **Backdrop.** Mica/Acrylic flyouts need Windows 11 22H2+, and Windows turns them off in energy
+  saver (use Translucent there: see-through, but without blur). On older versions flyouts use the
+  solid card. With a system backdrop, the content fades but the material itself appears and
+  disappears without a fade.
+- **Fullscreen detection** relies on the Windows notification state, which also reports a
+  browser in F11 fullscreen as busy. Turn "Pause in fullscreen games" off to see flyouts there.
+- **Start with Windows** uses the per-user registry Run key.
+- **English only** for now; the structure for more languages is in place.
+
+- **Visualizer.** It listens to the default playback device as it was when playback started; after
+  switching output devices it may stay flat until the next pause/play. It reacts to all system
+  audio, not only the media player.
+
+## Credits
+
+NxtFlyout's code, icon and branding are original. It builds on
+[WPF-UI](https://github.com/lepoco/wpfui) (MIT) and
+[CommunityToolkit.Mvvm](https://github.com/CommunityToolkit/dotnet) (MIT).
