@@ -79,9 +79,20 @@ internal sealed class CoreAudioVolumeService : IVolumeService
 
         try
         {
-            enumerator = new MMDeviceEnumeratorComObject();
+            // Not `new` on a [ComImport] coclass: NAudio (used for the spectrum capture) declares its
+            // own coclass with the same CLSID, and the runtime maps a CLSID to only one managed class
+            // per process. Once NAudio's is loaded, `new` here yields NAudio's RCW type and the cast
+            // fails. CoCreateInstance hands back a plain RCW typed only by the interface we ask for.
+            var classId = MMDeviceEnumeratorClassId;
+            var enumeratorId = typeof(IMMDeviceEnumerator).GUID;
+            var hr = CoCreateInstance(ref classId, IntPtr.Zero, ClsCtxAll, ref enumeratorId, out enumerator);
+            if (hr != 0 || enumerator is null)
+            {
+                Marshal.ThrowExceptionForHR(hr);
+                return false;
+            }
 
-            var hr = ((IMMDeviceEnumerator)enumerator).GetDefaultAudioEndpoint(DataFlowRender, RoleConsole, out device);
+            hr = ((IMMDeviceEnumerator)enumerator).GetDefaultAudioEndpoint(DataFlowRender, RoleConsole, out device);
             if (hr != 0 || device is null)
             {
                 // Typically "element not found": no playback device at the moment.
@@ -128,11 +139,15 @@ internal sealed class CoreAudioVolumeService : IVolumeService
 
     // ----- Core Audio COM interfaces (only the members used here are named) -----
 
-    [ComImport]
-    [Guid("BCDE0395-E52F-467C-8E3D-C4579291692E")]
-    private class MMDeviceEnumeratorComObject
-    {
-    }
+    private static readonly Guid MMDeviceEnumeratorClassId = new("BCDE0395-E52F-467C-8E3D-C4579291692E");
+
+    [DllImport("ole32.dll", ExactSpelling = true)]
+    private static extern int CoCreateInstance(
+        ref Guid classId,
+        IntPtr outer,
+        int classContext,
+        ref Guid interfaceId,
+        [MarshalAs(UnmanagedType.IUnknown)] out object? instance);
 
     [ComImport]
     [Guid("A95664D2-9614-4F35-A746-DE8DB63617E6")]
