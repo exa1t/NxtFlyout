@@ -79,8 +79,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           $tag = '${{ github.ref_name }}'
-          $notes = (Get-Content installer/release-notes.md -Raw).Replace('<version>', '${{ steps.version.outputs.version }}')
-          Set-Content -Path release-notes.tmp.md -Value $notes -Encoding utf8
+          # What's new (this version's CHANGELOG.md section), then the install steps.
+          ./installer/release-notes.ps1 -Version '${{ steps.version.outputs.version }}' -OutFile release-notes.tmp.md
           $files = Get-ChildItem artifacts/installer -File | ForEach-Object { $_.FullName }
 
           gh release view $tag *> $null

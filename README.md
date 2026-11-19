@@ -129,6 +129,12 @@ the tests, builds the installer and portable zip, and publishes them with checks
 Release. Use **Actions → Release → Run workflow** to build a test copy without releasing it;
 the files are attached to the workflow run.
 
+The release notes are that version's section of `CHANGELOG.md` (under "What's new"), followed by
+the install steps in `installer/release-notes.md`, so add the changelog entry before tagging.
+Preview them with `.\installer\release-notes.ps1 -Version 1.2.0 -OutFile notes.md`.
+elease-notes.ps1 -Version 1.2.0 -OutFile notes.md`.
+elease-notes.ps1 -Version 1.2.0 -OutFile notes.md`.
+
 The **CI** workflow builds and tests every push to `main`.
 
 ### On your PC
