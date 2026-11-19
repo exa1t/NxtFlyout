@@ -5,9 +5,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Deterministic>true</Deterministic>
 
-    <Version>1.2.0</Version>
-    <Product>NxtFlyout</Product>
-    <Company>NxtFlyout</Company>
+    <Version>1.3.0</Version>
+    <Product>NxtHUD</Product>
+    <Company>NxtHUD</Company>
     <Copyright>Copyright (c) 2026 exa1t</Copyright>
     <NeutralLanguage>en</NeutralLanguage>
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>

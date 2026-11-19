@@ -1,9 +1,9 @@
-NxtFlyout - third-party software notices
+NxtHUD - third-party software notices
 =========================================
 
-NxtFlyout itself is licensed under the MIT License (see LICENSE).
+NxtHUD itself is licensed under the MIT License (see LICENSE).
 
-The NxtFlyout installer and portable zip include the following third-party
+The NxtHUD installer and portable zip include the following third-party
 components. Each is used under the license shown below, and its copyright
 notice is reproduced as that license requires.
 

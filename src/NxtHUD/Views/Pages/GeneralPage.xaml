@@ -1,0 +1,62 @@
+<Page
+    x:Class="NxtHUD.Views.Pages.GeneralPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:loc="clr-namespace:NxtHUD.Localization"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+    <StackPanel Margin="0,24,0,24">
+        <TextBlock Style="{StaticResource PageTitleStyle}" Text="{loc:Loc Nav_General}" />
+
+        <ui:InfoBar
+            Title="{loc:Loc General_Error_Title}"
+            Margin="0,0,0,12"
+            IsClosable="False"
+            IsOpen="{Binding HasError, Mode=OneWay}"
+            Message="{Binding ErrorMessage, Mode=OneWay}"
+            Severity="Error" />
+
+        <ui:CardControl Margin="0,0,0,8">
+            <ui:CardControl.Icon>
+                <ui:FontIcon Glyph="&#xE7E8;" Style="{StaticResource CardIconStyle}" />
+            </ui:CardControl.Icon>
+            <ui:CardControl.Header>
+                <StackPanel>
+                    <TextBlock Style="{StaticResource CardTitleStyle}" Text="{loc:Loc General_StartWithWindows_Title}" />
+                    <TextBlock Style="{StaticResource CardDescriptionStyle}" Text="{loc:Loc General_StartWithWindows_Description}" />
+                </StackPanel>
+            </ui:CardControl.Header>
+            <ui:ToggleSwitch IsChecked="{Binding StartWithWindows, Mode=TwoWay}" />
+        </ui:CardControl>
+
+        <ui:CardControl Margin="0,0,0,8">
+            <ui:CardControl.Icon>
+                <ui:FontIcon Glyph="&#xE774;" Style="{StaticResource CardIconStyle}" />
+            </ui:CardControl.Icon>
+            <ui:CardControl.Header>
+                <StackPanel>
+                    <TextBlock Style="{StaticResource CardTitleStyle}" Text="{loc:Loc General_Language_Title}" />
+                    <TextBlock Style="{StaticResource CardDescriptionStyle}" Text="{loc:Loc General_Language_Description}" />
+                </StackPanel>
+            </ui:CardControl.Header>
+            <ComboBox
+                MinWidth="200"
+                ItemTemplate="{StaticResource OptionItemTemplate}"
+                ItemsSource="{Binding Languages, Mode=OneTime}"
+                SelectedItem="{Binding Language, Mode=TwoWay}" />
+        </ui:CardControl>
+
+        <ui:CardControl Margin="0,0,0,8">
+            <ui:CardControl.Icon>
+                <ui:FontIcon Glyph="&#xE7FC;" Style="{StaticResource CardIconStyle}" />
+            </ui:CardControl.Icon>
+            <ui:CardControl.Header>
+                <StackPanel>
+                    <TextBlock Style="{StaticResource CardTitleStyle}" Text="{loc:Loc General_DisableInFullscreen_Title}" />
+                    <TextBlock Style="{StaticResource CardDescriptionStyle}" Text="{loc:Loc General_DisableInFullscreen_Description}" />
+                </StackPanel>
+            </ui:CardControl.Header>
+            <ui:ToggleSwitch IsChecked="{Binding DisableInFullscreen, Mode=TwoWay}" />
+        </ui:CardControl>
+    </StackPanel>
+</Page>

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Rebuilds the app icon assets from the two SVG sources in this folder.
 
-Outputs (into src/NxtFlyout/Assets):
-  NxtFlyout.ico  multi-size icon: 16-64 px as 32-bit bitmaps, 256 px as PNG
+Outputs (into src/NxtHUD/Assets):
+  NxtHUD.ico  multi-size icon: 16-64 px as 32-bit bitmaps, 256 px as PNG
   Logo.png       256 px logo used inside the settings window
 
 Requires: rsvg-convert (librsvg) and Pillow.   Usage: python3 build_icon.py
@@ -15,7 +15,7 @@ from pathlib import Path
 from PIL import Image
 
 HERE = Path(__file__).resolve().parent
-ASSETS = HERE.parent.parent / "src" / "NxtFlyout" / "Assets"
+ASSETS = HERE.parent.parent / "src" / "NxtHUD" / "Assets"
 
 # Small sizes use the simplified drawing so the tray icon stays legible.
 SMALL_SIZES = [16, 20, 24, 32, 40]
@@ -65,9 +65,9 @@ def main() -> None:
         offset += len(data)
         body += data
 
-    (ASSETS / "NxtFlyout.ico").write_bytes(directory + body)
+    (ASSETS / "NxtHUD.ico").write_bytes(directory + body)
     render(HERE / "icon-large.svg", 256).save(ASSETS / "Logo.png", optimize=True)
-    print(f"Wrote {ASSETS / 'NxtFlyout.ico'} ({len(frames)} sizes) and Logo.png")
+    print(f"Wrote {ASSETS / 'NxtHUD.ico'} ({len(frames)} sizes) and Logo.png")
 
 
 if __name__ == "__main__":
