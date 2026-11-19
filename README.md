@@ -167,6 +167,8 @@ tools/icon/              SVG sources and the script that builds the .ico
   window, places it in physical pixels on the chosen display, and either asks Windows for a
   Mica/Acrylic backdrop or draws a solid rounded card.
 - **Taskbar widget** – a small window owned by the taskbar window, repositioned on a slow timer.
+  `TaskbarButtonScanner` finds the taskbar's buttons with UI Automation on a worker thread, and
+  `TaskbarWidgetFit` picks the free space and the fullest layout that fits it.
 
 ## Adding a language
 
@@ -193,9 +195,12 @@ The language picker then offers it, and switching applies without a restart.
   has focus unless NxtFlyout is elevated too, so flyouts do not appear then, and with the overlay
   replacement on, the Windows overlay appears instead.
 - **Taskbar widget.** Windows has no API for adding content to the taskbar. The widget is a
-  separate window placed over the left end of a horizontal primary taskbar; it does not know
-  about the taskbar's own buttons, so use the offset setting if it covers the Widgets button or
-  left-aligned icons. It is hidden for vertical or auto-hidden taskbars and fullscreen apps.
+  separate window over a horizontal primary taskbar. It reads where the taskbar's own buttons are
+  through UI Automation and only uses the free space between them: at the left end with centred
+  icons, after the last icon with left-aligned ones. When space runs short it drops to a narrower
+  title, then hides the visualizer, then the text, and it hides itself if even the cover and
+  buttons do not fit. It re-checks every 1.5 seconds, so for a moment after opening an app the
+  icons can overlap it. It is hidden for vertical or auto-hidden taskbars and fullscreen apps.
 - **Backdrop.** Mica/Acrylic flyouts need Windows 11 22H2+, and Windows turns them off in energy
   saver (use Translucent there: see-through, but without blur). On older versions flyouts use the
   solid card. With a system backdrop, the content fades but the material itself appears and

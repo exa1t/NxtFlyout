@@ -24,7 +24,15 @@
         set from code to contrast with the taskbar, and the buttons inherit it.
     -->
     <!-- The almost-invisible fill makes the whole widget clickable, not just its text and picture. -->
-    <Grid VerticalAlignment="Stretch" Background="#01FFFFFF">
+    <!--
+        TaskbarWidgetService gives the widget only the room between the taskbar's own buttons and
+        steps it down when that is short: narrower text, then no visualizer, then no text (see
+        TaskbarWidgetLayout). The named parts below are what ApplyLayout changes.
+    -->
+    <Grid
+        x:Name="LayoutRoot"
+        VerticalAlignment="Stretch"
+        Background="#01FFFFFF">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
@@ -40,7 +48,7 @@
             Command="{Binding OpenFlyoutCommand}"
             Style="{StaticResource TransportButtonStyle}"
             ToolTip="{loc:Loc Widget_Open}">
-            <Grid Margin="6,0,10,0">
+            <Grid x:Name="CoverAndText" Margin="6,0,10,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
@@ -63,6 +71,7 @@
                 </Grid>
 
                 <StackPanel
+                    x:Name="TextPanel"
                     Grid.Column="1"
                     MaxWidth="170"
                     Margin="8,0,0,0"
@@ -120,17 +129,21 @@
             </Button>
         </StackPanel>
 
-        <!-- Audio visualizer: draws nothing interactive, so clicks pass to the window background. -->
-        <views:VisualizerBars
-            Grid.Column="2"
-            Margin="8,0,10,0"
-            VerticalAlignment="Stretch"
-            Alignment="{Binding VisualizerAlignment}"
-            BarCount="{Binding VisualizerBarCount}"
-            ColorMode="{Binding VisualizerColorMode}"
-            CustomColor="{Binding VisualizerCustomColor}"
-            IsHitTestVisible="False"
-            Levels="{Binding VisualizerLevels}"
-            Visibility="{Binding ShowVisualizer, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        <!--
+            Audio visualizer: draws nothing interactive, so clicks pass to the window background.
+            The setting shows or hides the bars; the host is hidden when there is no room for them.
+        -->
+        <Border x:Name="VisualizerHost" Grid.Column="2">
+            <views:VisualizerBars
+                Margin="8,0,10,0"
+                VerticalAlignment="Stretch"
+                Alignment="{Binding VisualizerAlignment}"
+                BarCount="{Binding VisualizerBarCount}"
+                ColorMode="{Binding VisualizerColorMode}"
+                CustomColor="{Binding VisualizerCustomColor}"
+                IsHitTestVisible="False"
+                Levels="{Binding VisualizerLevels}"
+                Visibility="{Binding ShowVisualizer, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        </Border>
     </Grid>
 </Window>

@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
+using NxtFlyout.Core.Flyouts;
 using NxtFlyout.Core.ViewModels;
 using NxtFlyout.Interop;
 
@@ -12,10 +13,58 @@ namespace NxtFlyout.Views;
 /// </summary>
 public partial class TaskbarWidgetWindow : Window
 {
+    /// <summary>Widest the title and artist get, in device-independent pixels.</summary>
+    private const double FullTextWidth = 170;
+
+    /// <summary>Title and artist width once space runs short.</summary>
+    private const double NarrowTextWidth = 90;
+
+    private TaskbarWidgetLayout _layout = TaskbarWidgetLayout.Full;
+
     public TaskbarWidgetWindow(TaskbarWidgetViewModel viewModel)
     {
         InitializeComponent();
         DataContext = viewModel;
+    }
+
+    /// <summary>
+    /// Returns the width, in device-independent pixels, the widget needs in each layout for the
+    /// track it is showing now. Leaves the current layout as it was.
+    /// </summary>
+    public Func<TaskbarWidgetLayout, double> MeasureLayouts()
+    {
+        var widths = new Dictionary<TaskbarWidgetLayout, double>();
+        var current = _layout;
+        var available = new Size(double.PositiveInfinity, double.IsNaN(Height) ? double.PositiveInfinity : Height);
+        foreach (var layout in Enum.GetValues<TaskbarWidgetLayout>())
+        {
+            SetParts(layout);
+            LayoutRoot.Measure(available);
+            widths[layout] = LayoutRoot.DesiredSize.Width;
+        }
+
+        SetParts(current);
+        return layout => widths[layout];
+    }
+
+    /// <summary>Shows as much of the widget as <paramref name="layout"/> allows.</summary>
+    public void ApplyLayout(TaskbarWidgetLayout layout)
+    {
+        if (layout != _layout)
+        {
+            _layout = layout;
+            SetParts(layout);
+        }
+    }
+
+    private void SetParts(TaskbarWidgetLayout layout)
+    {
+        TextPanel.MaxWidth = layout == TaskbarWidgetLayout.Full ? FullTextWidth : NarrowTextWidth;
+        TextPanel.Visibility = layout == TaskbarWidgetLayout.Minimal ? Visibility.Collapsed : Visibility.Visible;
+        CoverAndText.Margin = layout == TaskbarWidgetLayout.Minimal ? new Thickness(6, 0, 4, 0) : new Thickness(6, 0, 10, 0);
+        VisualizerHost.Visibility = layout is TaskbarWidgetLayout.Full or TaskbarWidgetLayout.NarrowText
+            ? Visibility.Visible
+            : Visibility.Collapsed;
     }
 
     /// <summary>Uses light text on a dark taskbar and dark text on a light one.</summary>
