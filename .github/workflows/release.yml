@@ -1,4 +1,4 @@
-# Builds the NxtFlyout installer on Windows and publishes it as a GitHub Release.
+# Builds the NxtHUD installer on Windows and publishes it as a GitHub Release.
 #
 # To release:  git tag v1.2.0  &&  git push origin v1.2.0
 # The tag decides the version stamped on the app and installer.
@@ -68,7 +68,7 @@ jobs:
       - name: Keep the files with this run
         uses: actions/upload-artifact@v4
         with:
-          name: NxtFlyout-${{ steps.version.outputs.version }}
+          name: NxtHUD-${{ steps.version.outputs.version }}
           path: artifacts/installer/*
           if-no-files-found: error
 
@@ -88,6 +88,6 @@ jobs:
             # Re-running the workflow for a tag replaces that release's files.
             gh release upload $tag @files --clobber
           } else {
-            gh release create $tag @files --title "NxtFlyout $tag" --notes-file release-notes.tmp.md
+            gh release create $tag @files --title "NxtHUD $tag" --notes-file release-notes.tmp.md
           }
           if ($LASTEXITCODE -ne 0) { throw 'Publishing the release failed.' }

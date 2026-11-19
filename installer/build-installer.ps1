@@ -1,12 +1,12 @@
 <#
 .SYNOPSIS
-    Publishes NxtFlyout and builds its installer and portable zip.
+    Publishes NxtHUD and builds its installer and portable zip.
 
 .DESCRIPTION
     1. Runs the unit tests.
     2. Publishes a self-contained x64 build to artifacts\publish (no .NET install needed on the target PC).
-    3. Compiles installer\NxtFlyout.iss with Inno Setup into artifacts\installer\NxtFlyout-Setup-<version>.exe.
-    4. Zips the published app into artifacts\installer\NxtFlyout-<version>-portable-x64.zip.
+    3. Compiles installer\NxtHUD.iss with Inno Setup into artifacts\installer\NxtHUD-Setup-<version>.exe.
+    4. Zips the published app into artifacts\installer\NxtHUD-<version>-portable-x64.zip.
     5. Writes SHA-256 checksums of both to artifacts\installer\SHA256SUMS.txt.
 
     Requires the .NET 8 SDK (or newer) and Inno Setup 6.3 or later:
@@ -41,11 +41,11 @@ param(
 $ErrorActionPreference = 'Stop'
 
 $root = Split-Path -Parent $PSScriptRoot
-$solution = Join-Path $root 'NxtFlyout.sln'
-$project = Join-Path $root 'src\NxtFlyout\NxtFlyout.csproj'
+$solution = Join-Path $root 'NxtHUD.sln'
+$project = Join-Path $root 'src\NxtHUD\NxtHUD.csproj'
 $publishDir = Join-Path $root 'artifacts\publish'
 $outputDir = Join-Path $root 'artifacts\installer'
-$script = Join-Path $PSScriptRoot 'NxtFlyout.iss'
+$script = Join-Path $PSScriptRoot 'NxtHUD.iss'
 
 if (-not $Version) {
     # The version normally lives in one place: Directory.Build.props.
@@ -58,7 +58,7 @@ if ($Version -notmatch '^\d+\.\d+\.\d+$') {
     throw "Version '$Version' must look like 1.2.3."
 }
 
-Write-Host "Building NxtFlyout $Version" -ForegroundColor Cyan
+Write-Host "Building NxtHUD $Version" -ForegroundColor Cyan
 
 if (-not $SkipTests) {
     dotnet test $solution -c Release
@@ -83,7 +83,7 @@ dotnet publish $project `
     -o $publishDir
 if ($LASTEXITCODE -ne 0) { throw 'dotnet publish failed.' }
 
-foreach ($required in @('NxtFlyout.exe', 'LICENSE.txt', 'THIRD-PARTY-NOTICES.txt')) {
+foreach ($required in @('NxtHUD.exe', 'LICENSE.txt', 'THIRD-PARTY-NOTICES.txt')) {
     if (-not (Test-Path (Join-Path $publishDir $required))) {
         throw "dotnet publish did not produce $required."
     }
@@ -103,8 +103,8 @@ if (-not $iscc) {
 & $iscc "/DAppVersion=$Version" $script
 if ($LASTEXITCODE -ne 0) { throw 'Inno Setup failed.' }
 
-$installer = Join-Path $outputDir "NxtFlyout-Setup-$Version.exe"
-$portable = Join-Path $outputDir "NxtFlyout-$Version-portable-x64.zip"
+$installer = Join-Path $outputDir "NxtHUD-Setup-$Version.exe"
+$portable = Join-Path $outputDir "NxtHUD-$Version-portable-x64.zip"
 
 Compress-Archive -Path (Join-Path $publishDir '*') -DestinationPath $portable -CompressionLevel Optimal
 
