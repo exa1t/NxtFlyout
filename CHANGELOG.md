@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.3.0
+
+- **NxtFlyout is now NxtHUD.** Same app, new name: the installer, the exe, the Start menu
+  entry, the tray and the settings window all say NxtHUD. The project moves to
+  github.com/exa1t/NxtHUD (the old address redirects).
+- **Upgrading from NxtFlyout** just works: run the NxtHUD installer over it. It keeps your
+  install folder, removes NxtFlyout's old program files and shortcuts, and closes a running
+  NxtFlyout first. On its first start NxtHUD copies your settings (and logs) from
+  `%AppData%\NxtFlyout` to `%AppData%\NxtHUD` and moves start-with-Windows to the new name,
+  keeping it off if you had switched it off in Task Manager. The old folder is left in place.
+
 ## 1.2.0
 
 - **Taskbar stats.** Optional CPU, memory, GPU, network and disk figures in the free space next

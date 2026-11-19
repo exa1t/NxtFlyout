@@ -1,13 +1,13 @@
 <p align="center">
-  <img src="docs/promo/banner.png" alt="NxtFlyout: Fluent flyouts for your media and keys, right on Windows 11." width="100%">
+  <img src="docs/promo/banner.png" alt="NxtHUD: Fluent flyouts for your media and keys, right on Windows 11." width="100%">
 </p>
 
 <p align="center">
-  <a href="https://github.com/exa1t/NxtFlyout/releases/latest"><img src="https://img.shields.io/github/v/release/exa1t/NxtFlyout?style=flat-square&color=6D5BF6&label=release" alt="Latest release"></a>
-  <a href="https://github.com/exa1t/NxtFlyout/releases"><img src="https://img.shields.io/github/downloads/exa1t/NxtFlyout/total?style=flat-square&color=4F7FE8&label=downloads" alt="Downloads"></a>
+  <a href="https://github.com/exa1t/NxtHUD/releases/latest"><img src="https://img.shields.io/github/v/release/exa1t/NxtHUD?style=flat-square&color=6D5BF6&label=release" alt="Latest release"></a>
+  <a href="https://github.com/exa1t/NxtHUD/releases"><img src="https://img.shields.io/github/downloads/exa1t/NxtHUD/total?style=flat-square&color=4F7FE8&label=downloads" alt="Downloads"></a>
   <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-2E9BD6?style=flat-square&logo=windows11&logoColor=white" alt="Windows 10 and 11">
   <img src="https://img.shields.io/badge/.NET-8-1AA9C4?style=flat-square&logo=dotnet&logoColor=white" alt=".NET 8">
-  <a href="LICENSE"><img src="https://img.shields.io/github/license/exa1t/NxtFlyout?style=flat-square&color=12B5C9" alt="MIT licence"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/exa1t/NxtHUD?style=flat-square&color=12B5C9" alt="MIT licence"></a>
 </p>
 
 <p align="center">
@@ -16,11 +16,11 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/exa1t/NxtFlyout/releases/latest"><img src="https://img.shields.io/badge/Download%20for%20Windows-6D5BF6?style=for-the-badge&logo=windows11&logoColor=white" alt="Download for Windows"></a>
+  <a href="https://github.com/exa1t/NxtHUD/releases/latest"><img src="https://img.shields.io/badge/Download%20for%20Windows-6D5BF6?style=for-the-badge&logo=windows11&logoColor=white" alt="Download for Windows"></a>
 </p>
 
 <p align="center">
-  <img src="docs/promo/hero.png" alt="NxtFlyout's media flyout, Up Next, volume bar, taskbar widget, taskbar stats and lock key flyouts floating over a violet and teal background" width="100%">
+  <img src="docs/promo/hero.png" alt="NxtHUD's media flyout, Up Next, volume bar, taskbar widget, taskbar stats and lock key flyouts floating over a violet and teal background" width="100%">
 </p>
 
 ## ✨ Highlights
@@ -43,20 +43,25 @@
 
 ## 📥 Download and install
 
-1. Go to [**Releases**](https://github.com/exa1t/NxtFlyout/releases/latest) and download
-   `NxtFlyout-Setup-<version>.exe`.
+1. Go to [**Releases**](https://github.com/exa1t/NxtHUD/releases/latest) and download
+   `NxtHUD-Setup-<version>.exe`.
 2. Run it. It needs no administrator rights and no .NET install: everything it needs is inside.
    Windows may say *"Windows protected your PC"* because the installer is not code-signed;
    click **More info → Run anyway**.
-3. Keep *"Start NxtFlyout automatically when I sign in"* ticked and finish. NxtFlyout starts and
+3. Keep *"Start NxtHUD automatically when I sign in"* ticked and finish. NxtHUD starts and
    opens its settings; afterwards it lives in the notification area (possibly behind the `^`
    arrow).
 
-To upgrade, run a newer installer: it closes the running copy and keeps your settings. To remove
-it, use **Settings → Apps → Installed apps → NxtFlyout → Uninstall**.
+**Coming from NxtFlyout?** NxtHUD is the same app under a new name (from 1.3.0). Run the
+NxtHUD installer over your NxtFlyout install: it upgrades it in place, removes the old
+shortcuts, and NxtHUD brings your settings and start-with-Windows choice across on its first
+start. Your old `%AppData%\NxtFlyout` folder is left untouched.
 
-No installer wanted? Download `NxtFlyout-<version>-portable-x64.zip`, unzip it anywhere and run
-`NxtFlyout.exe`.
+To upgrade, run a newer installer: it closes the running copy and keeps your settings. To remove
+it, use **Settings → Apps → Installed apps → NxtHUD → Uninstall**.
+
+No installer wanted? Download `NxtHUD-<version>-portable-x64.zip`, unzip it anywhere and run
+`NxtHUD.exe`.
 
 ## 🎵 Features
 
@@ -64,7 +69,7 @@ No installer wanted? Download `NxtFlyout-<version>-portable-x64.zip`, unzip it a
   track: album art, title, artist, player name, a live progress bar and previous / play-pause /
   next buttons.
 - **Volume flyout** (optional) – a Fluent volume indicator for the volume and mute keys. By
-  default NxtFlyout handles those keys itself, so the built-in Windows overlay does not appear
+  default NxtHUD handles those keys itself, so the built-in Windows overlay does not appear
   as well.
 - **Lock keys flyout** – shows the new state when you toggle Caps Lock, Num Lock or Scroll Lock.
 - **Up Next flyout** (optional) – briefly announces the new track when the song changes on its own.
@@ -99,19 +104,19 @@ No installer wanted? Download `NxtFlyout-<version>-portable-x64.zip`, unzip it a
 ```powershell
 dotnet build
 dotnet test
-dotnet run --project src/NxtFlyout
+dotnet run --project src/NxtHUD
 ```
 
 The first build restores [WPF-UI](https://github.com/lepoco/wpfui),
 [CommunityToolkit.Mvvm](https://github.com/CommunityToolkit/dotnet) and xUnit (tests only).
 
-After `dotnet run`, look for the NxtFlyout icon in the notification area (it may be behind the
+After `dotnet run`, look for the NxtHUD icon in the notification area (it may be behind the
 `^` arrow). Left-click it for settings, right-click for the menu.
 
 ## 📦 Build the installer
 
 The installer is a per-user [Inno Setup](https://jrsoftware.org/isinfo.php) package: no
-administrator rights, installs to `%LocalAppData%\Programs\NxtFlyout`, adds a Start menu entry,
+administrator rights, installs to `%LocalAppData%\Programs\NxtHUD`, adds a Start menu entry,
 optionally starts the app at sign-in, and registers an uninstaller. The app inside is
 self-contained, so the target PC does not need .NET.
 
@@ -120,8 +125,8 @@ self-contained, so the target PC does not need .NET.
 Releases are built by GitHub Actions on a Windows machine:
 
 ```powershell
-git tag v1.2.0
-git push origin v1.2.0
+git tag v1.3.0
+git push origin v1.3.0
 ```
 
 The **Release** workflow (`.github/workflows/release.yml`) takes the version from the tag, runs
@@ -131,9 +136,7 @@ the files are attached to the workflow run.
 
 The release notes are that version's section of `CHANGELOG.md` (under "What's new"), followed by
 the install steps in `installer/release-notes.md`, so add the changelog entry before tagging.
-Preview them with `.\installer\release-notes.ps1 -Version 1.2.0 -OutFile notes.md`.
-elease-notes.ps1 -Version 1.2.0 -OutFile notes.md`.
-elease-notes.ps1 -Version 1.2.0 -OutFile notes.md`.
+Preview them with `.\installer\release-notes.ps1 -Version 1.3.0 -OutFile notes.md`.
 
 The **CI** workflow builds and tests every push to `main`.
 
@@ -143,7 +146,7 @@ The **CI** workflow builds and tests every push to `main`.
    ```powershell
    winget install JRSoftware.InnoSetup
    ```
-2. Quit NxtFlyout if it is running, then from the solution folder:
+2. Quit NxtHUD if it is running, then from the solution folder:
    ```powershell
    powershell -ExecutionPolicy Bypass -File .\installer\build-installer.ps1
    ```
@@ -154,11 +157,11 @@ Options: `-Version 1.2.3` to override the version in `Directory.Build.props`,
 `-SkipTests` to skip the tests.
 
 The installer is not code-signed, so SmartScreen warns about an unknown publisher until a
-download has built up reputation. Uninstalling leaves your settings in `%AppData%\NxtFlyout`.
+download has built up reputation. Uninstalling leaves your settings in `%AppData%\NxtHUD`.
 
 ## ⚙️ Settings
 
-Settings are stored as JSON in `%AppData%\NxtFlyout\settings.json` and are written whenever you
+Settings are stored as JSON in `%AppData%\NxtHUD\settings.json` and are written whenever you
 change something (About → *Open folder* takes you there). The file tolerates hand edits; a file
 that cannot be parsed is copied to `settings.corrupt.json` and defaults are used.
 
@@ -169,14 +172,14 @@ that cannot be parsed is copied to `settings.corrupt.json` and defaults are used
 | Appearance | Theme, backdrop material, which display to use, media flyout position, compact layout, animation speed |
 | About | Version, settings folder, reset to defaults |
 
-Errors are logged to `%AppData%\NxtFlyout\logs\nxtflyout.log`.
+Errors are logged to `%AppData%\NxtHUD\logs\nxthud.log`.
 
 ## 🗂️ Project layout
 
 ```
-NxtFlyout.sln
+NxtHUD.sln
 src/
-  NxtFlyout.Core/        net8.0 – no WPF or Windows APIs, fully unit-testable
+  NxtHUD.Core/        net8.0 – no WPF or Windows APIs, fully unit-testable
     Settings/            AppSettings, SettingsService (JSON), tolerant enum converter
     Media/               MediaSnapshot, IMediaService, media key map, text formatting
     Audio/               IVolumeService
@@ -185,7 +188,7 @@ src/
     Localization/        Localizer (resx lookup with live language switching)
     ViewModels/          FlyoutViewModelBase and one view model per flyout, the widget and settings
     Resources/           Strings.resx
-  NxtFlyout/             net8.0-windows – WPF app
+  NxtHUD/             net8.0-windows – WPF app
     App.xaml(.cs)        start-up, single instance, shutdown, crash logging
     AppHost.cs           composition root: creates and wires the services
     Services/            SMTC media, Core Audio volume, keyboard hook, tray, theme, start-up,
@@ -195,7 +198,7 @@ src/
     Localization/        {loc:Loc Key} markup extension
     Assets/              app icon and logo
 tests/
-  NxtFlyout.Tests/       xUnit tests for everything in Core
+  NxtHUD.Tests/       xUnit tests for everything in Core
 installer/               Inno Setup script, build script, release notes template
 .github/workflows/       CI (build + test) and Release (installer → GitHub Release)
 tools/icon/              SVG sources and the script that builds the .ico
@@ -213,7 +216,7 @@ docs/promo/              README banner and cards: edit cards.html, run render.ps
   the volume itself through the Core Audio API; if that ever fails, the keys are handed back to
   Windows.
 - **View models** – all flyout logic (when to show, auto-hide, hover, fullscreen rule, one
-  flyout at a time) lives in `NxtFlyout.Core` and is unit-tested without any UI.
+  flyout at a time) lives in `NxtHUD.Core` and is unit-tested without any UI.
 - **Windows** – `FlyoutWindowBase` builds each flyout as a topmost `WS_EX_NOACTIVATE` tool
   window, places it in physical pixels on the chosen display, and either asks Windows for a
   Mica/Acrylic backdrop or draws a solid rounded card.
@@ -227,7 +230,7 @@ docs/promo/              README banner and cards: edit cards.html, run render.ps
 
 ## 🌍 Adding a language
 
-1. Copy `src/NxtFlyout.Core/Resources/Strings.resx` to `Strings.<culture>.resx` (for example
+1. Copy `src/NxtHUD.Core/Resources/Strings.resx` to `Strings.<culture>.resx` (for example
    `Strings.vi.resx`) and translate the values.
 2. Add the culture name to `Localizer.SupportedLanguages`.
 
@@ -247,7 +250,7 @@ The language picker then offers it, and switching applies without a restart.
   handling the volume keys. Volume changed any other way (a hardware knob that does not send key
   presses, the taskbar slider, another app) still uses the Windows overlay.
 - **Elevated windows.** A low-level keyboard hook is not delivered while an administrator window
-  has focus unless NxtFlyout is elevated too, so flyouts do not appear then, and with the overlay
+  has focus unless NxtHUD is elevated too, so flyouts do not appear then, and with the overlay
   replacement on, the Windows overlay appears instead.
 - **Taskbar widget.** Windows has no API for adding content to the taskbar. The widget is a
   separate window over a horizontal primary taskbar. It reads where the taskbar's own buttons are
@@ -276,13 +279,13 @@ The language picker then offers it, and switching applies without a restart.
 
 ## 🙌 Credits
 
-NxtFlyout's code, icon and branding are original. It builds on
+NxtHUD's code, icon and branding are original. It builds on
 [WPF-UI](https://github.com/lepoco/wpfui) (MIT),
 [CommunityToolkit.Mvvm](https://github.com/CommunityToolkit/dotnet) (MIT) and
 [NAudio](https://github.com/naudio/NAudio) (MIT). Their copyright and licence notices are in
 [THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt), which is also installed next to
-`NxtFlyout.exe`.
+`NxtHUD.exe`.
 
 ## 📄 License
 
-NxtFlyout is released under the [MIT License](LICENSE).
+NxtHUD is released under the [MIT License](LICENSE).
