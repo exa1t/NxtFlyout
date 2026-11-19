@@ -28,6 +28,10 @@ public sealed record AppSettings
     public const int DefaultVisualizerBars = 14;
     public const string DefaultVisualizerColor = "#4CC2FF";
 
+    public const int MinStatsIntervalMs = 500;
+    public const int MaxStatsIntervalMs = 5000;
+    public const int DefaultStatsIntervalMs = 1000;
+
     /// <summary>Value of <see cref="Language"/> that means "follow the Windows display language".</summary>
     public const string SystemLanguage = "system";
 
@@ -112,6 +116,30 @@ public sealed record AppSettings
     /// <summary>Colour used when <see cref="VisualizerColorMode"/> is Custom, as "#RRGGBB" or "#AARRGGBB".</summary>
     public string VisualizerCustomColor { get; set; } = DefaultVisualizerColor;
 
+    // ----- Taskbar stats -----
+
+    /// <summary>Show CPU, memory, GPU, network and disk figures in the free space of the taskbar.</summary>
+    public bool TaskbarStatsEnabled { get; set; }
+
+    public bool StatsShowCpu { get; set; } = true;
+
+    public bool StatsShowRam { get; set; } = true;
+
+    public bool StatsShowGpu { get; set; } = true;
+
+    /// <summary>Dedicated GPU memory in use.</summary>
+    public bool StatsShowVram { get; set; }
+
+    /// <summary>GPU temperature, where the graphics driver reports it.</summary>
+    public bool StatsShowGpuTemperature { get; set; }
+
+    public bool StatsShowNetwork { get; set; } = true;
+
+    public bool StatsShowDisk { get; set; } = true;
+
+    /// <summary>How often the figures refresh, in milliseconds.</summary>
+    public int StatsIntervalMs { get; set; } = DefaultStatsIntervalMs;
+
     /// <summary>
     /// App id of the media session the user pinned, or <c>null</c> for "Automatic"
     /// (follow whichever session Windows considers current).
@@ -189,6 +217,7 @@ public sealed record AppSettings
         TranslucentOpacity = Math.Clamp(TranslucentOpacity, MinTranslucentOpacity, MaxTranslucentOpacity);
 
         VisualizerBarCount = Math.Clamp(VisualizerBarCount, MinVisualizerBars, MaxVisualizerBars);
+        StatsIntervalMs = Math.Clamp(StatsIntervalMs, MinStatsIntervalMs, MaxStatsIntervalMs);
 
         if (!Enum.IsDefined(VisualizerColorMode))
         {

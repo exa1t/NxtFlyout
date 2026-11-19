@@ -26,11 +26,14 @@
   <img src="docs/promo/widget.png" alt="Taskbar widget: cover, track and controls with a live audio visualizer" width="49%">
 </p>
 <p align="center">
+  <img src="docs/promo/stats.png" alt="Taskbar stats: CPU, RAM, GPU, GPU temperature, network and disk next to the tray" width="49%">
   <img src="docs/promo/upnext.png" alt="Up Next flyout announcing the next track" width="49%">
-  <img src="docs/promo/volume.png" alt="Volume flyout replacing the Windows overlay" width="49%">
 </p>
 <p align="center">
+  <img src="docs/promo/volume.png" alt="Volume flyout replacing the Windows overlay" width="49%">
   <img src="docs/promo/lockkeys.png" alt="Lock keys flyout showing Caps Lock is on" width="49%">
+</p>
+<p align="center">
   <img src="docs/promo/settings.png" alt="Settings window with Mica, per-flyout switches and positions" width="49%">
 </p>
 
@@ -66,6 +69,10 @@ No installer wanted? Download `NxtFlyout-<version>-portable-x64.zip`, unzip it a
 - **Taskbar visualizer** – animated bars next to the taskbar widget that follow the audio
   (WASAPI loopback). 10–20 bars that grow from the middle, bottom up or top down; colour can match
   the taskbar, use the accent colour or a custom hex value.
+- **Taskbar stats** (optional) – CPU, memory and GPU use, network up/down and disk read/write
+  in the free space next to the notification icons, refreshed every second (or at your pace).
+  GPU memory and GPU temperature can be added when the graphics driver reports them. Click the
+  figures to open Task Manager. No administrator rights or drivers needed.
 - **Per-flyout position** – each flyout has its own on/off switch and screen position.
 - **Mica / Acrylic** – flyouts and the settings window use the Windows 11 materials (or a solid
   themed card when you choose "None" or run an older Windows).
@@ -203,6 +210,10 @@ docs/promo/              README banner and cards: edit cards.html, run render.ps
 - **Taskbar widget** – a small window owned by the taskbar window, repositioned on a slow timer.
   `TaskbarButtonScanner` finds the taskbar's buttons with UI Automation on a worker thread, and
   `TaskbarWidgetFit` picks the free space and the fullest layout that fits it.
+- **Taskbar stats** – `SystemStatsSource` reads CPU (`GetSystemTimes`), memory
+  (`GlobalMemoryStatusEx`), GPU, GPU memory and disk (the performance counters Task Manager
+  uses, through PDH), network (adapter byte counts) and GPU temperature (`D3DKMTQueryAdapterInfo`)
+  on a worker thread. `TaskbarStatsService` keeps the panel against the tray, clear of the widget.
 
 ## 🌍 Adding a language
 
@@ -235,6 +246,11 @@ The language picker then offers it, and switching applies without a restart.
   title, then hides the visualizer, then the text, and it hides itself if even the cover and
   buttons do not fit. It re-checks every 1.5 seconds, so for a moment after opening an app the
   icons can overlap it. It is hidden for vertical or auto-hidden taskbars and fullscreen apps.
+- **Taskbar stats.** Like the widget, the stats are a separate window beside the tray, not part
+  of the clock, and they step down to one line, then hide, when the free space runs out. GPU
+  temperature needs a recent graphics driver (WDDM 2.5 or later); CPU and disk temperatures
+  are not shown, because reading them needs administrator rights or a kernel driver. Network
+  figures count physical adapters only, so VPN traffic is not counted twice.
 - **Backdrop.** Mica/Acrylic flyouts need Windows 11 22H2+, and Windows turns them off in energy
   saver (use Translucent there: see-through, but without blur). On older versions flyouts use the
   solid card. With a system backdrop, the content fades but the material itself appears and

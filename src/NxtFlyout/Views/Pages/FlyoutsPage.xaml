@@ -236,6 +236,77 @@
             </StackPanel>
         </ui:CardControl>
 
+        <!-- Taskbar stats -->
+        <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{loc:Loc Flyouts_Section_TaskbarStats}" />
+
+        <ui:CardControl Margin="0,0,0,8">
+            <ui:CardControl.Icon>
+                <ui:FontIcon Glyph="&#xE9D2;" Style="{StaticResource CardIconStyle}" />
+            </ui:CardControl.Icon>
+            <ui:CardControl.Header>
+                <StackPanel>
+                    <TextBlock Style="{StaticResource CardTitleStyle}" Text="{loc:Loc Flyouts_TaskbarStats_Title}" />
+                    <TextBlock Style="{StaticResource CardDescriptionStyle}" Text="{loc:Loc Flyouts_TaskbarStats_Description}" />
+                </StackPanel>
+            </ui:CardControl.Header>
+            <ui:ToggleSwitch IsChecked="{Binding TaskbarStatsEnabled, Mode=TwoWay}" />
+        </ui:CardControl>
+
+        <ui:CardControl Margin="0,0,0,8" IsEnabled="{Binding TaskbarStatsEnabled, Mode=OneWay}">
+            <ui:CardControl.Icon>
+                <ui:FontIcon Glyph="&#xE762;" Style="{StaticResource CardIconStyle}" />
+            </ui:CardControl.Icon>
+            <ui:CardControl.Header>
+                <StackPanel>
+                    <TextBlock Style="{StaticResource CardTitleStyle}" Text="{loc:Loc Flyouts_StatsItems_Title}" />
+                    <TextBlock Style="{StaticResource CardDescriptionStyle}" Text="{loc:Loc Flyouts_StatsItems_Description}" />
+                    <WrapPanel Margin="0,10,0,0">
+                        <WrapPanel.Resources>
+                            <Style BasedOn="{StaticResource {x:Type CheckBox}}" TargetType="CheckBox">
+                                <Setter Property="Margin" Value="0,0,16,4" />
+                                <Setter Property="MinWidth" Value="0" />
+                            </Style>
+                        </WrapPanel.Resources>
+                        <CheckBox Content="{loc:Loc Stats_Cpu}" IsChecked="{Binding StatsShowCpu, Mode=TwoWay}" />
+                        <CheckBox Content="{loc:Loc Stats_Ram}" IsChecked="{Binding StatsShowRam, Mode=TwoWay}" />
+                        <CheckBox Content="{loc:Loc Stats_Gpu}" IsChecked="{Binding StatsShowGpu, Mode=TwoWay}" />
+                        <CheckBox Content="{loc:Loc Stats_Vram}" IsChecked="{Binding StatsShowVram, Mode=TwoWay}" />
+                        <CheckBox Content="{loc:Loc Stats_GpuTemperature}" IsChecked="{Binding StatsShowGpuTemperature, Mode=TwoWay}" />
+                        <CheckBox Content="{loc:Loc Stats_Network}" IsChecked="{Binding StatsShowNetwork, Mode=TwoWay}" />
+                        <CheckBox Content="{loc:Loc Stats_Disk}" IsChecked="{Binding StatsShowDisk, Mode=TwoWay}" />
+                    </WrapPanel>
+                </StackPanel>
+            </ui:CardControl.Header>
+        </ui:CardControl>
+
+        <ui:CardControl Margin="0,0,0,8" IsEnabled="{Binding TaskbarStatsEnabled, Mode=OneWay}">
+            <ui:CardControl.Icon>
+                <ui:FontIcon Glyph="&#xE916;" Style="{StaticResource CardIconStyle}" />
+            </ui:CardControl.Icon>
+            <ui:CardControl.Header>
+                <StackPanel>
+                    <TextBlock Style="{StaticResource CardTitleStyle}" Text="{loc:Loc Flyouts_StatsInterval_Title}" />
+                    <TextBlock Style="{StaticResource CardDescriptionStyle}" Text="{loc:Loc Flyouts_StatsInterval_Description}" />
+                </StackPanel>
+            </ui:CardControl.Header>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock
+                    MinWidth="40"
+                    Margin="0,0,12,0"
+                    VerticalAlignment="Center"
+                    Text="{Binding StatsIntervalSeconds, Mode=OneWay, StringFormat='{}{0:0.0} s'}"
+                    TextAlignment="Right" />
+                <Slider
+                    Width="220"
+                    VerticalAlignment="Center"
+                    IsSnapToTickEnabled="True"
+                    Maximum="{Binding MaxStatsIntervalSeconds, Mode=OneTime}"
+                    Minimum="{Binding MinStatsIntervalSeconds, Mode=OneTime}"
+                    TickFrequency="0.5"
+                    Value="{Binding StatsIntervalSeconds, Mode=TwoWay}" />
+            </StackPanel>
+        </ui:CardControl>
+
         <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="{loc:Loc Flyouts_Section_Behavior}" />
 
         <ui:CardControl Margin="0,0,0,8">

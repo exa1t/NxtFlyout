@@ -368,4 +368,49 @@
   <data name="Appearance_TranslucentOpacity_Description" xml:space="preserve">
     <value>How solid the flyout background is with the Translucent backdrop. Lower shows more of what is behind it.</value>
   </data>
+  <data name="Flyouts_Section_TaskbarStats" xml:space="preserve">
+    <value>Taskbar stats</value>
+  </data>
+  <data name="Flyouts_TaskbarStats_Title" xml:space="preserve">
+    <value>Show system stats on the taskbar</value>
+  </data>
+  <data name="Flyouts_TaskbarStats_Description" xml:space="preserve">
+    <value>CPU, memory, GPU, network and disk figures in the free space next to the notification icons. Click them to open Task Manager.</value>
+  </data>
+  <data name="Flyouts_StatsItems_Title" xml:space="preserve">
+    <value>Figures to show</value>
+  </data>
+  <data name="Flyouts_StatsItems_Description" xml:space="preserve">
+    <value>GPU memory and temperature only appear when your graphics driver reports them.</value>
+  </data>
+  <data name="Flyouts_StatsInterval_Title" xml:space="preserve">
+    <value>Refresh every</value>
+  </data>
+  <data name="Flyouts_StatsInterval_Description" xml:space="preserve">
+    <value>How often the figures update. Faster uses a little more CPU.</value>
+  </data>
+  <data name="Stats_Cpu" xml:space="preserve">
+    <value>CPU</value>
+  </data>
+  <data name="Stats_Ram" xml:space="preserve">
+    <value>Memory</value>
+  </data>
+  <data name="Stats_Gpu" xml:space="preserve">
+    <value>GPU</value>
+  </data>
+  <data name="Stats_Vram" xml:space="preserve">
+    <value>GPU memory</value>
+  </data>
+  <data name="Stats_GpuTemperature" xml:space="preserve">
+    <value>GPU temperature</value>
+  </data>
+  <data name="Stats_Network" xml:space="preserve">
+    <value>Network</value>
+  </data>
+  <data name="Stats_Disk" xml:space="preserve">
+    <value>Disk</value>
+  </data>
+  <data name="Stats_Open_Tooltip" xml:space="preserve">
+    <value>Open Task Manager</value>
+  </data>
 </root>

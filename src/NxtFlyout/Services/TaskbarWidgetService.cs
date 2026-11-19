@@ -1,6 +1,5 @@
 using System.ComponentModel;
 using System.Windows.Interop;
-using System.Windows.Threading;
 using NxtFlyout.Core.Flyouts;
 using NxtFlyout.Core.Settings;
 using NxtFlyout.Core.ViewModels;
@@ -17,15 +16,13 @@ namespace NxtFlyout.Services;
 /// <para>The widget is a separate small window owned by the taskbar window. Windows always
 /// keeps an owned window above its owner, which is what keeps the widget from disappearing
 /// behind the taskbar when the taskbar is clicked.</para>
-/// <para>Windows offers no API for adding content to the taskbar, so the widget does not know
-/// about the taskbar's own buttons. A slow timer re-checks the taskbar's position and size
-/// (it moves with display changes, auto-hide and Explorer restarts) and hides the widget
-/// while a fullscreen app covers the taskbar.</para>
+/// <para>Windows offers no API for adding content to the taskbar. <see cref="TaskbarTracker"/>
+/// re-checks the taskbar on a slow timer (it moves with display changes, auto-hide and Explorer
+/// restarts) and finds where its own buttons are; the widget takes the free space at the left
+/// and hides while a fullscreen app covers the taskbar.</para>
 /// </remarks>
 internal sealed class TaskbarWidgetService : IDisposable
 {
-    private const string TaskbarWindowClass = "Shell_TrayWnd";
-
     /// <summary>Gap between the widget and the left end of the taskbar, in device-independent pixels.</summary>
     private const double LeftGap = 8;
 
@@ -37,28 +34,35 @@ internal sealed class TaskbarWidgetService : IDisposable
 
     private readonly TaskbarWidgetViewModel _viewModel;
     private readonly ISettingsService _settings;
-    private readonly Dispatcher _dispatcher;
-    private readonly DispatcherTimer _timer;
+    private readonly TaskbarTracker _tracker;
 
     private TaskbarWidgetWindow? _window;
     private IntPtr _ownerTaskbar;
     private bool _started;
+    private TaskbarSpan? _occupiedSpan;
 
-    /// <summary>Where the taskbar's own buttons were at the last scan, in physical pixels.</summary>
-    private IReadOnlyList<TaskbarSpan>? _buttons;
-    private bool _scanning;
-
-    public TaskbarWidgetService(TaskbarWidgetViewModel viewModel, ISettingsService settings, Dispatcher dispatcher)
+    public TaskbarWidgetService(TaskbarWidgetViewModel viewModel, ISettingsService settings, TaskbarTracker tracker)
     {
         _viewModel = viewModel;
         _settings = settings;
-        _dispatcher = dispatcher;
+        _tracker = tracker;
+    }
 
-        _timer = new DispatcherTimer(DispatcherPriority.Background, dispatcher)
+    /// <summary>Raised when <see cref="OccupiedSpan"/> changes.</summary>
+    public event EventHandler? OccupiedSpanChanged;
+
+    /// <summary>The stretch of the taskbar the widget covers, in physical pixels, or null while it is hidden.</summary>
+    public TaskbarSpan? OccupiedSpan
+    {
+        get => _occupiedSpan;
+        private set
         {
-            Interval = TimeSpan.FromMilliseconds(1500),
-        };
-        _timer.Tick += OnTimerTick;
+            if (_occupiedSpan != value)
+            {
+                _occupiedSpan = value;
+                OccupiedSpanChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
     }
 
     public void Start()
@@ -71,6 +75,7 @@ internal sealed class TaskbarWidgetService : IDisposable
         _started = true;
         _viewModel.PropertyChanged += OnViewModelPropertyChanged;
         _settings.Changed += OnSettingsChanged;
+        _tracker.Changed += OnTaskbarChanged;
         Update();
     }
 
@@ -81,10 +86,10 @@ internal sealed class TaskbarWidgetService : IDisposable
             _started = false;
             _viewModel.PropertyChanged -= OnViewModelPropertyChanged;
             _settings.Changed -= OnSettingsChanged;
+            _tracker.Changed -= OnTaskbarChanged;
         }
 
-        _timer.Stop();
-        _timer.Tick -= OnTimerTick;
+        _tracker.Release(this);
         CloseWindow();
     }
 
@@ -111,68 +116,19 @@ internal sealed class TaskbarWidgetService : IDisposable
         }
     }
 
-    private void OnTimerTick(object? sender, EventArgs e)
-    {
-        ScanButtons();
-        Update();
-    }
-
-    /// <summary>
-    /// Re-reads where the taskbar's buttons are, on a worker thread, and re-places the widget if
-    /// they moved (an app was opened or closed, or the alignment changed).
-    /// </summary>
-    private void ScanButtons()
-    {
-        if (_scanning)
-        {
-            return;
-        }
-
-        var taskbar = NativeMethods.FindWindow(TaskbarWindowClass, null);
-        if (taskbar == IntPtr.Zero || !NativeMethods.GetWindowRect(taskbar, out var rect))
-        {
-            return;
-        }
-
-        _scanning = true;
-        Task.Run(() => TaskbarButtonScanner.Scan(taskbar, rect.Top, rect.Bottom, rect.Width))
-            .ContinueWith(
-                task => _dispatcher.InvokeAsync(() =>
-                {
-                    _scanning = false;
-
-                    if (task.Exception is { } error)
-                    {
-                        Log.Error("Reading the taskbar buttons failed unexpectedly.", error.GetBaseException());
-                        return;
-                    }
-
-                    // A failed scan keeps the last known layout rather than dropping the limit.
-                    if (task.Result is { } buttons && (_buttons is null || !buttons.SequenceEqual(_buttons)))
-                    {
-                        _buttons = buttons;
-                        Update();
-                    }
-                }),
-                TaskScheduler.Default);
-    }
+    private void OnTaskbarChanged(object? sender, EventArgs e) => Update();
 
     /// <summary>Brings the widget in line with the view model and the taskbar's current state.</summary>
     private void Update()
     {
         if (!_started || !_viewModel.IsVisible)
         {
-            _timer.Stop();
+            _tracker.Release(this);
             CloseWindow();
             return;
         }
 
-        _timer.Start();
-        if (_buttons is null)
-        {
-            // Showing for the first time: find the taskbar's buttons now rather than on the next tick.
-            ScanButtons();
-        }
+        _tracker.Acquire(this);
 
         try
         {
@@ -188,28 +144,19 @@ internal sealed class TaskbarWidgetService : IDisposable
 
     private void Place()
     {
-        var taskbar = NativeMethods.FindWindow(TaskbarWindowClass, null);
-        if (taskbar == IntPtr.Zero || !NativeMethods.GetWindowRect(taskbar, out var taskbarRect))
+        if (TaskbarTracker.GetState() is not { } taskbar)
         {
             CloseWindow();
             return;
         }
 
-        var display = ScreenHelper.GetDisplayOfWindow(taskbar);
-
-        // Only a horizontal taskbar that is actually on screen has room for the widget:
-        // not a vertical one, not one slid away by auto-hide, not one covered by a fullscreen app.
-        var isHorizontal = taskbarRect.Width > taskbarRect.Height;
-        var visibleHeight = Math.Min(taskbarRect.Bottom, display.Bounds.Bottom) - Math.Max(taskbarRect.Top, display.Bounds.Y);
-        var isOnScreen = visibleHeight >= taskbarRect.Height / 2.0;
-
-        if (!isHorizontal || !isOnScreen || FullscreenDetector.IsFullscreenAppActive())
+        if (!taskbar.HasRoom)
         {
             HideWindow();
             return;
         }
 
-        if (_window is not null && _ownerTaskbar != taskbar)
+        if (_window is not null && _ownerTaskbar != taskbar.Handle)
         {
             // Explorer restarted and made a new taskbar; the widget needs the new one as its owner.
             CloseWindow();
@@ -219,12 +166,13 @@ internal sealed class TaskbarWidgetService : IDisposable
         {
             _window = new TaskbarWidgetWindow(_viewModel);
             _window.Closed += OnWindowClosed;
-            _ownerTaskbar = taskbar;
-            new WindowInteropHelper(_window).Owner = taskbar;
+            _ownerTaskbar = taskbar.Handle;
+            new WindowInteropHelper(_window).Owner = taskbar.Handle;
         }
 
-        var scale = display.Scale;
-        var height = Math.Max(24, (taskbarRect.Height / scale) - (2 * VerticalInset));
+        var rect = taskbar.Rect;
+        var scale = taskbar.Scale;
+        var height = Math.Max(24, (rect.Height / scale) - (2 * VerticalInset));
         if (Math.Abs(_window.Height - height) > 0.5)
         {
             _window.Height = height;
@@ -233,15 +181,15 @@ internal sealed class TaskbarWidgetService : IDisposable
         _window.SetTaskbarTheme(ThemeService.IsTaskbarDark());
 
         var handle = new WindowInteropHelper(_window).EnsureHandle();
-        var x = taskbarRect.Left + ((LeftGap + _settings.Current.TaskbarWidgetOffset) * scale);
-        var y = taskbarRect.Top + (VerticalInset * scale);
+        var x = rect.Left + ((LeftGap + _settings.Current.TaskbarWidgetOffset) * scale);
+        var y = rect.Top + (VerticalInset * scale);
 
         // Fit between the taskbar's own buttons when we know where they are. Until the first
         // scan comes back, or if the taskbar cannot be read, behave as before: no limit.
         var room = MaxWidth;
-        if (_buttons is { } buttons)
+        if (_tracker.Buttons is { } buttons)
         {
-            var span = TaskbarWidgetFit.FindFreeSpan(taskbarRect.Left, taskbarRect.Right, x, buttons, LeftGap * scale);
+            var span = TaskbarWidgetFit.FindFreeSpan(rect.Left, rect.Right, x, buttons, LeftGap * scale);
             if (span is null)
             {
                 HideWindow();
@@ -252,7 +200,8 @@ internal sealed class TaskbarWidgetService : IDisposable
             room = Math.Min(MaxWidth, span.Value.Width / scale);
         }
 
-        var layout = TaskbarWidgetFit.ChooseLayout(room, _window.MeasureLayouts());
+        var widthOf = _window.MeasureLayouts();
+        var layout = TaskbarWidgetFit.ChooseLayout(room, widthOf);
         if (layout is null)
         {
             HideWindow();
@@ -273,6 +222,8 @@ internal sealed class TaskbarWidgetService : IDisposable
         {
             _window.Show();
         }
+
+        OccupiedSpan = new TaskbarSpan(x, x + (Math.Min(widthOf(layout.Value), room) * scale));
     }
 
     private void HideWindow()
@@ -281,10 +232,14 @@ internal sealed class TaskbarWidgetService : IDisposable
         {
             _window.Hide();
         }
+
+        OccupiedSpan = null;
     }
 
     private void CloseWindow()
     {
+        OccupiedSpan = null;
+
         var window = _window;
         if (window is null)
         {
@@ -306,5 +261,7 @@ internal sealed class TaskbarWidgetService : IDisposable
             _window = null;
             _ownerTaskbar = IntPtr.Zero;
         }
+
+        OccupiedSpan = null;
     }
 }

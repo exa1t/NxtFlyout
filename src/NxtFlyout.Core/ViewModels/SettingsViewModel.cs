@@ -411,6 +411,79 @@ public sealed class SettingsViewModel : ObservableObject, IDisposable
         _settings.Replace(new AppSettings());
     }
 
+    // ----- Taskbar stats -----
+
+    public bool TaskbarStatsEnabled
+    {
+        get => _settings.Current.TaskbarStatsEnabled;
+        set => Apply(s => s.TaskbarStatsEnabled = value);
+    }
+
+    public bool StatsShowCpu
+    {
+        get => _settings.Current.StatsShowCpu;
+        set => Apply(s => s.StatsShowCpu = value);
+    }
+
+    public bool StatsShowRam
+    {
+        get => _settings.Current.StatsShowRam;
+        set => Apply(s => s.StatsShowRam = value);
+    }
+
+    public bool StatsShowGpu
+    {
+        get => _settings.Current.StatsShowGpu;
+        set => Apply(s => s.StatsShowGpu = value);
+    }
+
+    public bool StatsShowVram
+    {
+        get => _settings.Current.StatsShowVram;
+        set => Apply(s => s.StatsShowVram = value);
+    }
+
+    public bool StatsShowGpuTemperature
+    {
+        get => _settings.Current.StatsShowGpuTemperature;
+        set => Apply(s => s.StatsShowGpuTemperature = value);
+    }
+
+    public bool StatsShowNetwork
+    {
+        get => _settings.Current.StatsShowNetwork;
+        set => Apply(s => s.StatsShowNetwork = value);
+    }
+
+    public bool StatsShowDisk
+    {
+        get => _settings.Current.StatsShowDisk;
+        set => Apply(s => s.StatsShowDisk = value);
+    }
+
+    public double MinStatsIntervalSeconds => AppSettings.MinStatsIntervalMs / 1000.0;
+
+    public double MaxStatsIntervalSeconds => AppSettings.MaxStatsIntervalMs / 1000.0;
+
+    /// <summary>How often the taskbar stats refresh, in seconds; a slider supplies it in half-second steps.</summary>
+    public double StatsIntervalSeconds
+    {
+        get => _settings.Current.StatsIntervalMs / 1000.0;
+        set
+        {
+            if (double.IsNaN(value) || double.IsInfinity(value))
+            {
+                OnPropertyChanged();
+                return;
+            }
+
+            var ms = (int)Math.Round(
+                Math.Clamp(value * 1000, AppSettings.MinStatsIntervalMs, AppSettings.MaxStatsIntervalMs),
+                MidpointRounding.AwayFromZero);
+            Apply(s => s.StatsIntervalMs = ms);
+        }
+    }
+
     private void OnSettingsChanged(object? sender, SettingsChangedEventArgs e)
     {
         if (_applyingOwnChange)

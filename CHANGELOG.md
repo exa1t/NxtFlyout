@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.0
+
+- **Taskbar stats.** Optional CPU, memory, GPU, network and disk figures in the free space next
+  to the notification icons, with GPU memory and GPU temperature as extras. Each figure can be
+  switched on or off, the refresh pace is adjustable, and a click opens Task Manager. Off by
+  default: turn it on in Settings → Flyouts → Taskbar stats.
+
 ## 1.1.2
 
 - **Volume keys work while music plays.** With the taskbar visualizer running, the volume keys

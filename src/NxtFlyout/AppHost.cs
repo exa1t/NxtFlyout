@@ -78,7 +78,12 @@ internal sealed class AppHost : IDisposable
 
         Spectrum = new LoopbackSpectrumSource(dispatcher);
         TaskbarWidget = new TaskbarWidgetViewModel(Media, Settings, MediaFlyout.Toggle, Spectrum);
-        TaskbarWidgetHost = new TaskbarWidgetService(TaskbarWidget, Settings, dispatcher);
+        TaskbarTracker = new TaskbarTracker(dispatcher);
+        TaskbarWidgetHost = new TaskbarWidgetService(TaskbarWidget, Settings, TaskbarTracker);
+
+        Stats = new SystemStatsSource(dispatcher);
+        TaskbarStats = new TaskbarStatsViewModel(Settings, Stats, OpenTaskManager);
+        TaskbarStatsHost = new TaskbarStatsService(TaskbarStats, TaskbarTracker, TaskbarWidgetHost, dispatcher);
     }
 
     public SettingsService Settings { get; }
@@ -112,6 +117,16 @@ internal sealed class AppHost : IDisposable
 
     public TaskbarWidgetService TaskbarWidgetHost { get; }
 
+    /// <summary>Follows the taskbar and its buttons for the widget and the stats panel.</summary>
+    internal TaskbarTracker TaskbarTracker { get; }
+
+    /// <summary>CPU, memory, GPU, network and disk figures for the stats panel.</summary>
+    internal SystemStatsSource Stats { get; }
+
+    public TaskbarStatsViewModel TaskbarStats { get; }
+
+    internal TaskbarStatsService TaskbarStatsHost { get; }
+
     public void Start()
     {
         var loadResult = Settings.Load();
@@ -133,6 +148,7 @@ internal sealed class AppHost : IDisposable
         UpdateKeyboardHook();
 
         TaskbarWidgetHost.Start();
+        TaskbarStatsHost.Start();
         _ = StartMediaAsync();
 
         if (loadResult == SettingsLoadResult.CreatedDefaults)
@@ -209,8 +225,12 @@ internal sealed class AppHost : IDisposable
         // Unhook first: the volume keys must work normally again the moment the app stops handling them.
         KeyboardHook.Dispose();
 
+        TaskbarStatsHost.Dispose();
+        TaskbarStats.Dispose();
+        Stats.Dispose();
         TaskbarWidgetHost.Dispose();
         TaskbarWidget.Dispose();
+        TaskbarTracker.Dispose();
         Spectrum.Dispose();
 
         foreach (var presenter in _presenters)
@@ -449,6 +469,20 @@ internal sealed class AppHost : IDisposable
     private static void OnSettingsSaveFailed(object? sender, Exception exception)
     {
         Log.Error("Saving settings failed.", exception);
+    }
+
+    /// <summary>Clicking the taskbar stats opens Task Manager, where the full details are.</summary>
+    private static void OpenTaskManager()
+    {
+        try
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("taskmgr.exe") { UseShellExecute = true });
+        }
+        catch (Exception ex) when (ex is Win32Exception or InvalidOperationException)
+        {
+            // For example Task Manager is disabled by policy.
+            Log.Error("Opening Task Manager failed.", ex);
+        }
     }
 
     private void OnOpenSettingsRequested(object? sender, EventArgs e) => ShowSettings();

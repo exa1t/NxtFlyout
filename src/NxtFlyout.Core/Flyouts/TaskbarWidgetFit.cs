@@ -19,6 +19,16 @@ public enum TaskbarWidgetLayout
     Minimal,
 }
 
+/// <summary>How much of the taskbar stats panel is shown when space is short.</summary>
+public enum TaskbarStatsLayout
+{
+    /// <summary>Load figures on top, transfer rates below.</summary>
+    TwoLines,
+
+    /// <summary>Only the first line that has anything in it.</summary>
+    OneLine,
+}
+
 /// <summary>A horizontal stretch of the taskbar, from <see cref="Left"/> to <see cref="Right"/>.</summary>
 public readonly record struct TaskbarSpan(double Left, double Right)
 {
@@ -79,17 +89,47 @@ public static class TaskbarWidgetFit
     }
 
     /// <summary>
+    /// Finds the free stretch of the taskbar that ends as far right as possible, at or before
+    /// <paramref name="preferredRight"/>: the mirror image of <see cref="FindFreeSpan"/>, for
+    /// something that sits against the tray (the notification icons and clock).
+    /// </summary>
+    /// <returns>
+    /// The free stretch, or <see langword="null"/> when there is none. Buttons at the preferred
+    /// position (the tray, when it is the right end of the taskbar) push it to the left of them.
+    /// </returns>
+    public static TaskbarSpan? FindFreeSpanBefore(
+        double taskbarLeft,
+        double taskbarRight,
+        double preferredRight,
+        IEnumerable<TaskbarSpan> obstacles,
+        double gap)
+    {
+        // Mirror everything around zero, reuse FindFreeSpan, and mirror the answer back.
+        var mirrored = obstacles.Select(o => new TaskbarSpan(-o.Right, -o.Left));
+        var span = FindFreeSpan(-taskbarRight, -taskbarLeft, -Math.Min(preferredRight, taskbarRight), mirrored, gap);
+        return span is { } s ? new TaskbarSpan(-s.Right, -s.Left) : null;
+    }
+
+    /// <summary>
     /// Picks the fullest layout whose width fits in <paramref name="availableWidth"/>, or
     /// <see langword="null"/> when not even <see cref="TaskbarWidgetLayout.Minimal"/> fits.
     /// </summary>
     /// <param name="availableWidth">The room there is.</param>
     /// <param name="widthOf">The width the widget needs in a given layout, in the same unit.</param>
-    public static TaskbarWidgetLayout? ChooseLayout(double availableWidth, Func<TaskbarWidgetLayout, double> widthOf)
+    public static TaskbarWidgetLayout? ChooseLayout(double availableWidth, Func<TaskbarWidgetLayout, double> widthOf) =>
+        ChooseLayout<TaskbarWidgetLayout>(availableWidth, widthOf);
+
+    /// <summary>
+    /// Picks the first layout, in declaration order (fullest first), whose width fits in
+    /// <paramref name="availableWidth"/>, or <see langword="null"/> when none fits.
+    /// </summary>
+    public static TLayout? ChooseLayout<TLayout>(double availableWidth, Func<TLayout, double> widthOf)
+        where TLayout : struct, Enum
     {
         // Half a pixel of tolerance for rounding between device and logical pixels.
         const double Tolerance = 0.5;
 
-        foreach (var layout in Enum.GetValues<TaskbarWidgetLayout>())
+        foreach (var layout in Enum.GetValues<TLayout>())
         {
             if (widthOf(layout) <= availableWidth + Tolerance)
             {
