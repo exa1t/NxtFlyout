@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.1.2
+
+- **Volume keys work while music plays.** With the taskbar visualizer running, the volume keys
+  failed and were handed back to Windows, so the Windows volume overlay appeared instead of
+  NxtFlyout's flyout. Fixed.
+- **Taskbar widget stays clear of the taskbar's icons.** It now finds where the Start button,
+  app icons, Widgets button and tray are, and only uses the free space between them. When space
+  runs short it narrows the title, then hides the visualizer, then the text, and hides itself if
+  even the cover and buttons do not fit. With left-aligned icons it moves after the last icon.
+
 ## 1.1.1
 
 - NxtFlyout is now MIT-licensed (`LICENSE`). The installer and portable zip include `LICENSE.txt`

@@ -77,8 +77,8 @@ self-contained, so the target PC does not need .NET.
 Releases are built by GitHub Actions on a Windows machine:
 
 ```powershell
-git tag v1.1.1
-git push origin v1.1.1
+git tag v1.1.2
+git push origin v1.1.2
 ```
 
 The **Release** workflow (`.github/workflows/release.yml`) takes the version from the tag, runs
