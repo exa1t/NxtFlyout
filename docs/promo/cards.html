@@ -1,0 +1,187 @@
+<!doctype html>
+<!--
+  Source for the README banner and feature cards. render.ps1 opens this page once per card
+  (cards.html?card=<id>) in headless Edge and saves a PNG. Edit the text here, then run
+  docs\promo\render.ps1 to rebuild the images.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NxtFlyout promo cards</title>
+<style>
+  :root {
+    --violet: #6D5BF6;
+    --teal: #12B5C9;
+    --ink: #0B0D1F;
+    --ink-2: #14163A;
+    --text: #F4F5FF;
+    --muted: #B8BCE6;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: var(--ink); }
+  body {
+    font-family: "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+  }
+  .card { display: none; position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+  .card.on { display: flex; }
+
+  /* Background: deep navy with two soft glows in the logo colours, plus a faint grid. */
+  .card::before {
+    content: ""; position: absolute; inset: 0; z-index: 0;
+    background:
+      radial-gradient(60% 80% at 100% 100%, rgba(18, 181, 201, .45), transparent 70%),
+      radial-gradient(55% 75% at 0% 0%, rgba(109, 91, 246, .55), transparent 70%),
+      linear-gradient(160deg, var(--ink-2), var(--ink));
+  }
+  .card::after {
+    content: ""; position: absolute; inset: 0; z-index: 0; opacity: .07;
+    background-image:
+      linear-gradient(rgba(255,255,255,.6) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.6) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: radial-gradient(70% 70% at 50% 50%, #000, transparent);
+  }
+  .card > * { position: relative; z-index: 1; }
+
+  /* Feature card layout: words on the left, the screenshot on the right. */
+  .feature { align-items: center; gap: 28px; padding: 0 36px; }
+  .words { flex: 0 0 41%; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 5px 12px; border-radius: 999px; font-size: 13px; font-weight: 600;
+    letter-spacing: .02em; color: #fff;
+    background: linear-gradient(90deg, var(--violet), var(--teal));
+    box-shadow: 0 4px 18px rgba(109, 91, 246, .45);
+  }
+  h2 {
+    margin-top: 14px; font-size: 34px; line-height: 1.08; font-weight: 700; letter-spacing: -.01em;
+  }
+  h2 em {
+    font-style: normal;
+    background: linear-gradient(90deg, #A79BFF, #5EE3F0);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  ul { margin-top: 16px; padding: 0; list-style: none; }
+  li { position: relative; padding-left: 20px; margin-top: 8px; font-size: 16px; line-height: 1.35; color: var(--muted); }
+  li::before {
+    content: ""; position: absolute; left: 0; top: .45em; width: 9px; height: 9px; border-radius: 3px;
+    background: linear-gradient(135deg, var(--violet), var(--teal));
+  }
+  .shot { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: center; }
+  .shot img {
+    max-width: 100%; max-height: 330px; border-radius: 12px;
+    box-shadow: 0 18px 50px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.08);
+  }
+
+  /* Small screenshots sit on a glass panel, filling its width, so they keep some presence. */
+  .shot.panel {
+    align-self: center; height: 260px; padding: 0 28px; border-radius: 22px;
+    background: linear-gradient(145deg, rgba(167,155,255,.14), rgba(94,227,240,.08));
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.10), 0 24px 60px rgba(0,0,0,.35);
+  }
+  .shot.panel img { width: 100%; max-height: none; }
+
+  /* Banner: logo and name centred over the glow, the hero screenshot below. */
+  .banner { flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  .banner .brand { display: flex; align-items: center; gap: 18px; }
+  .banner .brand img { width: 84px; height: 84px; filter: drop-shadow(0 10px 24px rgba(18,181,201,.45)); }
+  .banner h1 { font-size: 72px; font-weight: 700; letter-spacing: -.02em; }
+  .banner h1 span {
+    background: linear-gradient(90deg, #A79BFF, #5EE3F0);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .banner p { margin-top: 10px; font-size: 22px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<section class="card banner" id="banner">
+  <div class="brand"><img src="logo.png" alt=""><h1>Nxt<span>Flyout</span></h1></div>
+  <p>Fluent flyouts for your media and keys, right on Windows 11.</p>
+</section>
+
+<section class="card feature" id="media">
+  <div class="words">
+    <span class="chip">♪ Media flyout</span>
+    <h2>Now playing, <em>at a glance</em></h2>
+    <ul>
+      <li>Cover art, title, artist and the player it comes from</li>
+      <li>Live progress bar with previous, play/pause and next</li>
+      <li>Shows up on any media key, from any SMTC player</li>
+    </ul>
+  </div>
+  <div class="shot"><img src="../screenshots/media-flyout-and-widget.png" alt=""></div>
+</section>
+
+<section class="card feature" id="upnext">
+  <div class="words">
+    <span class="chip">⏭ Up Next</span>
+    <h2>Know what's <em>playing next</em></h2>
+    <ul>
+      <li>A small card announces each new track as it starts</li>
+      <li>Stays out of the way and fades on its own</li>
+      <li>Turn it on or off in Settings</li>
+    </ul>
+  </div>
+  <div class="shot panel"><img src="../screenshots/up-next-flyout.png" alt=""></div>
+</section>
+
+<section class="card feature" id="volume">
+  <div class="words">
+    <span class="chip">🔊 Volume</span>
+    <h2>A volume bar that <em>fits in</em></h2>
+    <ul>
+      <li>Replaces the stock Windows volume overlay</li>
+      <li>Follows your light or dark theme and accent colour</li>
+      <li>Choose where on screen it appears</li>
+    </ul>
+  </div>
+  <div class="shot panel"><img src="../screenshots/volume-flyout.png" alt=""></div>
+</section>
+
+<section class="card feature" id="lockkeys">
+  <div class="words">
+    <span class="chip">🔒 Lock keys</span>
+    <h2>Caps Lock, <em>no guessing</em></h2>
+    <ul>
+      <li>Caps Lock, Num Lock and Scroll Lock state on every press</li>
+      <li>Small, quick and never steals focus</li>
+    </ul>
+  </div>
+  <div class="shot panel"><img src="../screenshots/lock-keys-flyout.png" alt=""></div>
+</section>
+
+<section class="card feature" id="widget">
+  <div class="words">
+    <span class="chip">▶ Taskbar widget</span>
+    <h2>Your music, <em>on the taskbar</em></h2>
+    <ul>
+      <li>Cover, track and controls next to the Start button</li>
+      <li>Live audio visualizer that follows the music</li>
+      <li>Shrinks to fit around your taskbar icons</li>
+    </ul>
+  </div>
+  <div class="shot panel"><img src="../screenshots/taskbar-widget.png" alt=""></div>
+</section>
+
+<section class="card feature" id="settings">
+  <div class="words">
+    <span class="chip">⚙ Settings</span>
+    <h2>Make it <em>yours</em></h2>
+    <ul>
+      <li>Mica and Acrylic, light and dark, following Windows</li>
+      <li>Each flyout with its own switch and position</li>
+      <li>Starts with Windows, pauses in fullscreen games</li>
+    </ul>
+  </div>
+  <div class="shot"><img src="../screenshots/settings.png" alt=""></div>
+</section>
+
+<script>
+  const id = new URLSearchParams(location.search).get("card") || "banner";
+  document.getElementById(id)?.classList.add("on");
+</script>
+</body>
+</html>

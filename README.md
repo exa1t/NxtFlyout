@@ -1,18 +1,40 @@
-# NxtFlyout
+<p align="center">
+  <img src="docs/promo/banner.png" alt="NxtFlyout: Fluent flyouts for your media and keys, right on Windows 11." width="100%">
+</p>
 
-A lightweight Windows 11 tray utility that shows Fluent-style flyouts for media and keyboard events.
+<p align="center">
+  <a href="https://github.com/exa1t/NxtFlyout/releases/latest"><img src="https://img.shields.io/github/v/release/exa1t/NxtFlyout?style=flat-square&color=6D5BF6&label=release" alt="Latest release"></a>
+  <a href="https://github.com/exa1t/NxtFlyout/releases"><img src="https://img.shields.io/github/downloads/exa1t/NxtFlyout/total?style=flat-square&color=4F7FE8&label=downloads" alt="Downloads"></a>
+  <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-2E9BD6?style=flat-square&logo=windows11&logoColor=white" alt="Windows 10 and 11">
+  <img src="https://img.shields.io/badge/.NET-8-1AA9C4?style=flat-square&logo=dotnet&logoColor=white" alt=".NET 8">
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/exa1t/NxtFlyout?style=flat-square&color=12B5C9" alt="MIT licence"></a>
+</p>
 
-![Media flyout above the taskbar widget, with cover art, track info, playback controls and the audio visualizer](docs/screenshots/media-flyout-and-widget.png)
+<p align="center">
+  A lightweight tray app that brings <b>Fluent-style flyouts</b> to your media keys, volume and lock keys,<br>
+  plus a <b>now-playing widget</b> with a live visualizer right on the taskbar.
+</p>
 
-## Screenshots
+<p align="center">
+  <a href="https://github.com/exa1t/NxtFlyout/releases/latest"><img src="https://img.shields.io/badge/Download%20for%20Windows-6D5BF6?style=for-the-badge&logo=windows11&logoColor=white" alt="Download for Windows"></a>
+</p>
 
-| Up Next | Volume | Lock keys |
-| --- | --- | --- |
-| ![Up Next flyout announcing the next track](docs/screenshots/up-next-flyout.png) | ![Volume flyout at 58](docs/screenshots/volume-flyout.png) | ![Caps Lock is on](docs/screenshots/lock-keys-flyout.png) |
+## ✨ Highlights
 
-![NxtFlyout settings window, General page](docs/screenshots/settings.png)
+<p align="center">
+  <img src="docs/promo/media.png" alt="Media flyout: cover art, title, artist, player, progress bar and playback controls" width="49%">
+  <img src="docs/promo/widget.png" alt="Taskbar widget: cover, track and controls with a live audio visualizer" width="49%">
+</p>
+<p align="center">
+  <img src="docs/promo/upnext.png" alt="Up Next flyout announcing the next track" width="49%">
+  <img src="docs/promo/volume.png" alt="Volume flyout replacing the Windows overlay" width="49%">
+</p>
+<p align="center">
+  <img src="docs/promo/lockkeys.png" alt="Lock keys flyout showing Caps Lock is on" width="49%">
+  <img src="docs/promo/settings.png" alt="Settings window with Mica, per-flyout switches and positions" width="49%">
+</p>
 
-## Download and install
+## 📥 Download and install
 
 1. Go to [**Releases**](https://github.com/exa1t/NxtFlyout/releases/latest) and download
    `NxtFlyout-Setup-<version>.exe`.
@@ -29,7 +51,7 @@ it, use **Settings → Apps → Installed apps → NxtFlyout → Uninstall**.
 No installer wanted? Download `NxtFlyout-<version>-portable-x64.zip`, unzip it anywhere and run
 `NxtFlyout.exe`.
 
-## Features
+## 🎵 Features
 
 - **Media flyout** – press a media key (play/pause, next, previous, stop) to see the current
   track: album art, title, artist, player name, a live progress bar and previous / play-pause /
@@ -55,13 +77,13 @@ No installer wanted? Download `NxtFlyout-<version>-portable-x64.zip`, unzip it a
   Dark theme that follows Windows and its accent colour live.
 - **Localizable** – every string comes from a resx file; English ships first.
 
-## Requirements
+## 💻 Requirements
 
 - Windows 10 version 2004 (build 19041) or later. **Windows 11 22H2 or later** for Mica/Acrylic
   flyouts and rounded corners.
 - [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) or newer to build.
 
-## Build and run
+## 🛠️ Build and run
 
 ```powershell
 dotnet build
@@ -75,7 +97,7 @@ The first build restores [WPF-UI](https://github.com/lepoco/wpfui),
 After `dotnet run`, look for the NxtFlyout icon in the notification area (it may be behind the
 `^` arrow). Left-click it for settings, right-click for the menu.
 
-## Build the installer
+## 📦 Build the installer
 
 The installer is a per-user [Inno Setup](https://jrsoftware.org/isinfo.php) package: no
 administrator rights, installs to `%LocalAppData%\Programs\NxtFlyout`, adds a Start menu entry,
@@ -117,7 +139,7 @@ Options: `-Version 1.2.3` to override the version in `Directory.Build.props`,
 The installer is not code-signed, so SmartScreen warns about an unknown publisher until a
 download has built up reputation. Uninstalling leaves your settings in `%AppData%\NxtFlyout`.
 
-## Settings
+## ⚙️ Settings
 
 Settings are stored as JSON in `%AppData%\NxtFlyout\settings.json` and are written whenever you
 change something (About → *Open folder* takes you there). The file tolerates hand edits; a file
@@ -132,7 +154,7 @@ that cannot be parsed is copied to `settings.corrupt.json` and defaults are used
 
 Errors are logged to `%AppData%\NxtFlyout\logs\nxtflyout.log`.
 
-## Project layout
+## 🗂️ Project layout
 
 ```
 NxtFlyout.sln
@@ -160,9 +182,11 @@ tests/
 installer/               Inno Setup script, build script, release notes template
 .github/workflows/       CI (build + test) and Release (installer → GitHub Release)
 tools/icon/              SVG sources and the script that builds the .ico
+docs/screenshots/        app screenshots the README cards are built from
+docs/promo/              README banner and cards: edit cards.html, run render.ps1
 ```
 
-## How it works
+## 🔍 How it works
 
 - **Media** – `SmtcMediaService` follows the system's current media session through
   `Windows.Media.Control` (SMTC) and publishes an immutable `MediaSnapshot` on every change.
@@ -180,7 +204,7 @@ tools/icon/              SVG sources and the script that builds the .ico
   `TaskbarButtonScanner` finds the taskbar's buttons with UI Automation on a worker thread, and
   `TaskbarWidgetFit` picks the free space and the fullest layout that fits it.
 
-## Adding a language
+## 🌍 Adding a language
 
 1. Copy `src/NxtFlyout.Core/Resources/Strings.resx` to `Strings.<culture>.resx` (for example
    `Strings.vi.resx`) and translate the values.
@@ -188,7 +212,7 @@ tools/icon/              SVG sources and the script that builds the .ico
 
 The language picker then offers it, and switching applies without a restart.
 
-## Known limitations
+## ⚠️ Known limitations
 
 - **Players without SMTC data.** Media info comes from the System Media Transport Controls.
   Players that do not publish to SMTC cannot be shown or controlled, and some publish only part
@@ -224,7 +248,7 @@ The language picker then offers it, and switching applies without a restart.
   switching output devices it may stay flat until the next pause/play. It reacts to all system
   audio, not only the media player.
 
-## Credits
+## 🙌 Credits
 
 NxtFlyout's code, icon and branding are original. It builds on
 [WPF-UI](https://github.com/lepoco/wpfui) (MIT),
@@ -233,6 +257,6 @@ NxtFlyout's code, icon and branding are original. It builds on
 [THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt), which is also installed next to
 `NxtFlyout.exe`.
 
-## License
+## 📄 License
 
 NxtFlyout is released under the [MIT License](LICENSE).
