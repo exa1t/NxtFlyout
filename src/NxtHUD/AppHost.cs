@@ -5,6 +5,7 @@ using NxtHUD.Core.Flyouts;
 using NxtHUD.Core.Input;
 using NxtHUD.Core.Localization;
 using NxtHUD.Core.Media;
+using NxtHUD.Core.Migration;
 using NxtHUD.Core.Settings;
 using NxtHUD.Core.ViewModels;
 using NxtHUD.Interop;
@@ -129,6 +130,9 @@ internal sealed class AppHost : IDisposable
 
     public void Start()
     {
+        // Before anything reads the settings or the Run key: bring a user of the old NxtFlyout across.
+        MigrateFromNxtFlyout();
+
         var loadResult = Settings.Load();
         Settings.SaveFailed += OnSettingsSaveFailed;
         Log.Info($"{AppInfo.Name} {AppInfo.Version} starting on Windows build {Environment.OSVersion.Version.Build} (settings: {loadResult}).");
@@ -279,6 +283,29 @@ internal sealed class AppHost : IDisposable
     /// The registry, not the settings file, is the truth for start-with-Windows: the user can
     /// switch the entry off in Task Manager while the app is not looking.
     /// </summary>
+    /// <summary>
+    /// The app used to be called NxtFlyout: copy its settings from %AppData%\NxtFlyout and move
+    /// its start-with-Windows entry to the new name. Never stops the app from starting.
+    /// </summary>
+    private static void MigrateFromNxtFlyout()
+    {
+        try
+        {
+            var migration = new LegacyMigration(new MigrationFileSystem(), new StartupRegistry(), Log.Info);
+            var legacyDirectory = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                LegacyMigration.LegacyName);
+
+            migration.MigrateSettings(legacyDirectory, AppInfo.DataDirectory);
+            migration.MigrateAutostart(AppInfo.Name, AppInfo.GetAutostartCommand());
+        }
+        catch (Exception ex) when (ex is InvalidOperationException or IOException or UnauthorizedAccessException)
+        {
+            // For example the path of the running executable is unknown.
+            Log.Error("Migrating from NxtFlyout failed; continuing without it.", ex);
+        }
+    }
+
     private void SyncStartupRegistration()
     {
         try
