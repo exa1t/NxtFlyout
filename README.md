@@ -19,6 +19,10 @@
   <a href="https://github.com/exa1t/NxtFlyout/releases/latest"><img src="https://img.shields.io/badge/Download%20for%20Windows-6D5BF6?style=for-the-badge&logo=windows11&logoColor=white" alt="Download for Windows"></a>
 </p>
 
+<p align="center">
+  <img src="docs/promo/hero.png" alt="NxtFlyout's media flyout, Up Next, volume bar, taskbar widget, taskbar stats and lock key flyouts floating over a violet and teal background" width="100%">
+</p>
+
 ## ✨ Highlights
 
 <p align="center">

@@ -30,18 +30,26 @@ $cards = @(
     @('settings', 1000, 760)
 )
 
-foreach ($card in $cards) {
-    $id, $width, $height = $card
-    $out = Join-Path $PSScriptRoot "$id.png"
+function Render([string]$pageUrl, [string]$name, [int]$width, [int]$height) {
+    $out = Join-Path $PSScriptRoot "$name.png"
     if (Test-Path $out) { Remove-Item $out }
 
     # Edge reports "N bytes written" on stderr, which Windows PowerShell would treat as an error.
     $ErrorActionPreference = 'Continue'
     & $edge --headless=new --disable-gpu --hide-scrollbars --allow-file-access-from-files `
         --force-device-scale-factor=2 "--window-size=$width,$height" "--screenshot=$out" `
-        "$url`?card=$id" 2>&1 | Out-Null
+        $pageUrl 2>&1 | Out-Null
     $ErrorActionPreference = 'Stop'
 
-    if (-not (Test-Path $out)) { throw "Rendering $id failed." }
-    Write-Host "Rendered $id.png"
+    if (-not (Test-Path $out)) { throw "Rendering $name failed." }
+    Write-Host "Rendered $name.png"
 }
+
+foreach ($card in $cards) {
+    $id, $width, $height = $card
+    Render "$url`?card=$id" $id $width $height
+}
+
+# The hero collage at the top of the README has a page of its own.
+$hero = 'file:///' + ((Resolve-Path (Join-Path $PSScriptRoot 'hero.html')).Path -replace '\\', '/')
+Render $hero 'hero' 1200 520

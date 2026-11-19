@@ -1,0 +1,77 @@
+<!doctype html>
+<!--
+  Source for the README hero image: NxtFlyout's flyouts floating in 3D over a flowing background
+  in the logo's violet-to-teal colours. render.ps1 renders it to hero.png at 2x.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NxtFlyout hero</title>
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #0B0D1F; }
+
+  /* Background: deep navy with soft ribbons of light in the logo colours. */
+  .scene { position: relative; width: 100vw; height: 100vh; overflow: hidden;
+    background: radial-gradient(120% 90% at 85% 110%, #0F6E86 0%, transparent 55%),
+                radial-gradient(90% 80% at 0% 0%, #3A2C9E 0%, transparent 60%),
+                linear-gradient(160deg, #15123F, #0A0C1E 70%); }
+  .ribbon { position: absolute; border-radius: 50%; filter: blur(2px); opacity: .9; }
+  .ribbon.a { width: 1500px; height: 520px; left: -380px; top: 300px; transform: rotate(-14deg);
+    background: linear-gradient(90deg, transparent, rgba(109,91,246,.55) 35%, rgba(18,181,201,.45) 70%, transparent);
+    mask-image: linear-gradient(transparent 46%, #000 50%, #000 54%, transparent 58%); }
+  .ribbon.b { width: 1600px; height: 640px; left: -200px; top: 240px; transform: rotate(-8deg);
+    background: linear-gradient(90deg, transparent, rgba(167,155,255,.35) 40%, rgba(94,227,240,.35) 75%, transparent);
+    mask-image: linear-gradient(transparent 47%, #000 50%, transparent 53%); }
+  .ribbon.c { width: 1700px; height: 900px; left: -300px; top: 120px; transform: rotate(-20deg);
+    background: radial-gradient(closest-side, rgba(109,91,246,.35), transparent); filter: blur(30px); }
+  .grain { position: absolute; inset: 0; opacity: .08;
+    background-image: radial-gradient(rgba(255,255,255,.7) 1px, transparent 1px); background-size: 3px 3px;
+    mask-image: radial-gradient(70% 70% at 60% 50%, #000, transparent); }
+
+  /* The flyouts: one tilted plane, each card at its own depth. */
+  .stage { position: absolute; inset: 0; perspective: 1500px; perspective-origin: 55% 40%; }
+  .plane { position: absolute; left: 50%; top: 50%; width: 0; height: 0;
+    transform-style: preserve-3d;
+    transform: translate(-30px, -46px) rotateX(22deg) rotateY(-20deg) rotateZ(8deg) scale3d(.66, .66, .66); }
+  .fly { position: absolute; transform-style: preserve-3d; }
+  .fly img { display: block; border-radius: 12px;
+    box-shadow: 0 30px 60px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.10); }
+  .fly.glow img { box-shadow: 0 30px 60px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.12), 0 0 60px rgba(109,91,246,.35); }
+</style>
+</head>
+<body>
+<div class="scene">
+  <div class="ribbon c"></div>
+  <div class="ribbon a"></div>
+  <div class="ribbon b"></div>
+  <div class="grain"></div>
+
+  <div class="stage"><div class="plane">
+    <!-- Back: the settings window, faint, for depth. -->
+    <div class="fly" style="transform: translate3d(-300px,-700px,-340px) scale(.52); opacity:.5;">
+      <img src="../screenshots/settings-appearance.png" alt=""></div>
+
+    <!-- Middle: media flyout (the star), Up Next and the volume bar. -->
+    <div class="fly glow" style="transform: translate3d(-620px,-150px,90px) scale(1.55);">
+      <img src="../screenshots/media-flyout.png" alt=""></div>
+    <div class="fly" style="transform: translate3d(70px,-230px,30px) scale(1.4);">
+      <img src="../screenshots/up-next-flyout.png" alt=""></div>
+    <div class="fly" style="transform: translate3d(140px,-20px,60px) scale(1.45);">
+      <img src="../screenshots/volume-flyout.png" alt=""></div>
+
+    <!-- Front: the taskbar widget, the stats strip and the lock keys. -->
+    <div class="fly glow" style="transform: translate3d(-660px,150px,140px) scale(1.5);">
+      <img src="../screenshots/taskbar-widget.png" alt=""></div>
+    <div class="fly" style="transform: translate3d(40px,120px,120px) scale(1.3);">
+      <img src="../screenshots/taskbar-stats.png" alt=""></div>
+    <div class="fly" style="transform: translate3d(-660px,290px,190px) scale(1.4);">
+      <img src="../screenshots/num-lock-flyout.png" alt=""></div>
+    <div class="fly glow" style="transform: translate3d(-150px,280px,230px) scale(1.55);">
+      <img src="../screenshots/lock-keys-flyout.png" alt=""></div>
+    <div class="fly" style="transform: translate3d(250px,300px,170px) scale(1.4);">
+      <img src="../screenshots/scroll-lock-flyout.png" alt=""></div>
+  </div></div>
+</div>
+</body>
+</html>
