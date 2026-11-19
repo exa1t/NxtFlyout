@@ -2,6 +2,16 @@
 
 A lightweight Windows 11 tray utility that shows Fluent-style flyouts for media and keyboard events.
 
+![Media flyout above the taskbar widget, with cover art, track info, playback controls and the audio visualizer](docs/screenshots/media-flyout-and-widget.png)
+
+## Screenshots
+
+| Up Next | Volume | Lock keys |
+| --- | --- | --- |
+| ![Up Next flyout announcing the next track](docs/screenshots/up-next-flyout.png) | ![Volume flyout at 58](docs/screenshots/volume-flyout.png) | ![Caps Lock is on](docs/screenshots/lock-keys-flyout.png) |
+
+![NxtFlyout settings window, General page](docs/screenshots/settings.png)
+
 ## Download and install
 
 1. Go to [**Releases**](https://github.com/exa1t/NxtFlyout/releases/latest) and download
