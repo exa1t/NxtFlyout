@@ -95,6 +95,9 @@
   .feature.stacked ul { display: flex; flex-wrap: wrap; gap: 6px 26px; margin-top: 14px; }
   .feature.stacked li { margin-top: 0; font-size: 15px; }
   .feature.stacked .shot.panel { flex: none; align-self: center; height: auto; padding: 30px 34px; }
+  /* A full-window screenshot is larger than the card: scale it down (smoothly) to the panel's width. */
+  .feature.stacked .shot.panel.fit { align-self: stretch; padding: 22px; }
+  .shot.panel.fit img { width: 100%; image-rendering: auto; border-radius: 10px; }
 
   /* Banner: logo and name centred over the glow, the hero screenshot below. */
   .banner { flex-direction: column; align-items: center; justify-content: center; text-align: center; }
@@ -192,17 +195,18 @@
   <div class="shot panel"><img src="../screenshots/taskbar-stats.png" alt=""></div>
 </section>
 
-<section class="card feature" id="settings">
+<section class="card feature stacked" id="settings">
   <div class="words">
-    <span class="chip">⚙ Settings</span>
+    <span class="chip">⚙ Appearance</span>
     <h2>Make it <em>yours</em></h2>
     <ul>
-      <li>Mica and Acrylic, light and dark, following Windows</li>
-      <li>Each flyout with its own switch and position</li>
-      <li>Starts with Windows, pauses in fullscreen games</li>
+      <li>Light, dark or follow Windows</li>
+      <li>Mica, Acrylic or translucent at your opacity</li>
+      <li>Pick where flyouts appear, and on which display</li>
+      <li>Compact layout and animation speed to taste</li>
     </ul>
   </div>
-  <div class="shot"><img src="../screenshots/settings.png" alt=""></div>
+  <div class="shot panel fit"><img src="../screenshots/settings-appearance.png" alt=""></div>
 </section>
 
 <script>

@@ -34,7 +34,7 @@
   <img src="docs/promo/lockkeys.png" alt="Lock keys flyout showing Caps Lock is on" width="49%">
 </p>
 <p align="center">
-  <img src="docs/promo/settings.png" alt="Settings window with Mica, per-flyout switches and positions" width="49%">
+  <img src="docs/promo/settings.png" alt="Appearance settings: theme, backdrop material, opacity, flyout position, display, compact layout and animation speed" width="98%">
 </p>
 
 ## 📥 Download and install

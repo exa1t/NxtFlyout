@@ -27,7 +27,7 @@ $cards = @(
     @('lockkeys', 800, 420),
     @('widget', 800, 420),
     @('stats', 800, 420),
-    @('settings', 800, 420)
+    @('settings', 1000, 760)
 )
 
 foreach ($card in $cards) {
