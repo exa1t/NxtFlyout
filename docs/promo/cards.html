@@ -75,13 +75,26 @@
     box-shadow: 0 18px 50px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.08);
   }
 
-  /* Small screenshots sit on a glass panel, filling its width, so they keep some presence. */
+  /*
+    Small screenshots sit on a glass panel at their exact native size. The page renders at 2x,
+    so each screen pixel becomes exactly 2x2 output pixels; "pixelated" copies them as they are
+    instead of smoothing, which keeps the text crisp. Never stretch these to fit: a fractional
+    scale is what makes them blurry.
+  */
   .shot.panel {
     align-self: center; height: 260px; padding: 0 28px; border-radius: 22px;
     background: linear-gradient(145deg, rgba(167,155,255,.14), rgba(94,227,240,.08));
     box-shadow: inset 0 0 0 1px rgba(255,255,255,.10), 0 24px 60px rgba(0,0,0,.35);
   }
-  .shot.panel img { width: 100%; max-height: none; }
+  .shot.panel img { width: auto; max-width: none; max-height: none; image-rendering: pixelated; }
+
+  /* Stacked: words on top, a wide screenshot underneath at full size (the taskbar stats strip). */
+  .feature.stacked { flex-direction: column; align-items: stretch; justify-content: center; gap: 26px; padding: 0 44px; }
+  .feature.stacked .words { flex: none; }
+  .feature.stacked h2 { font-size: 32px; }
+  .feature.stacked ul { display: flex; flex-wrap: wrap; gap: 6px 26px; margin-top: 14px; }
+  .feature.stacked li { margin-top: 0; font-size: 15px; }
+  .feature.stacked .shot.panel { flex: none; align-self: center; height: auto; padding: 30px 34px; }
 
   /* Banner: logo and name centred over the glow, the hero screenshot below. */
   .banner { flex-direction: column; align-items: center; justify-content: center; text-align: center; }
@@ -166,7 +179,7 @@
   <div class="shot panel"><img src="../screenshots/taskbar-widget.png" alt=""></div>
 </section>
 
-<section class="card feature" id="stats">
+<section class="card feature stacked" id="stats">
   <div class="words">
     <span class="chip">📊 Taskbar stats</span>
     <h2>Your PC's pulse, <em>by the clock</em></h2>
